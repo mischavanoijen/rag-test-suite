@@ -1,0 +1,106 @@
+generate_report:
+  description: >
+    Generate a comprehensive quality report based on the test results and analysis.
+
+    **Test Summary:**
+    - Overall Pass Rate: {pass_rate}%
+    - Total Tests: {total_tests}
+    - Tests Passed: {passed_count}
+    - Tests Failed: {failed_count}
+
+    **Category Breakdown:**
+    {category_breakdown}
+
+    **Analysis Results:**
+    {analysis_summary}
+
+    **Recommendations:**
+    {recommendations}
+
+    **Report Requirements:**
+
+    1. **Executive Summary** - Quick overview for busy stakeholders
+       - Overall score and verdict (pass/needs work/critical issues)
+       - Top 3 findings
+       - Top 3 action items
+
+    2. **Detailed Results** - Category-by-category breakdown
+       - Pass rates per category
+       - Identified issues per category
+
+    3. **Failed Test Analysis** - Examples of what went wrong
+       - Representative failed tests
+       - Analysis of why they failed
+
+    4. **Recommendations** - Prioritized improvement list
+       - High priority (fix immediately)
+       - Medium priority (plan for next sprint)
+       - Low priority (nice to have)
+
+    5. **Action Items** - Checkbox list of concrete tasks
+
+  expected_output: >
+    A well-formatted Markdown report:
+
+    ```markdown
+    # RAG Quality Report
+
+    **Generated:** {timestamp}
+    **Target:** {target_name}
+
+    ## Executive Summary
+
+    **Overall Score:** XX%
+    **Verdict:** [PASS / NEEDS IMPROVEMENT / CRITICAL ISSUES]
+
+    ### Key Findings
+    1. Finding one
+    2. Finding two
+    3. Finding three
+
+    ### Priority Actions
+    1. Action one
+    2. Action two
+    3. Action three
+
+    ---
+
+    ## Test Results by Category
+
+    | Category | Pass Rate | Passed | Failed | Status |
+    |----------|-----------|--------|--------|--------|
+    | Factual | XX% | X | X | OK/WARN/FAIL |
+
+    ---
+
+    ## Failed Test Analysis
+
+    ### Example 1: TEST-XXX
+    - **Question:** ...
+    - **Expected:** ...
+    - **Actual:** ...
+    - **Analysis:** ...
+
+    ---
+
+    ## Recommendations
+
+    ### High Priority
+    - [ ] Recommendation 1
+
+    ### Medium Priority
+    - [ ] Recommendation 2
+
+    ### Low Priority
+    - [ ] Recommendation 3
+
+    ---
+
+    ## Action Items
+
+    - [ ] Task 1
+    - [ ] Task 2
+    - [ ] Task 3
+    ```
+
+  agent: report_writer

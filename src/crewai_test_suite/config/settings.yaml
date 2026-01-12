@@ -1,0 +1,71 @@
+# CrewAI Test Suite Configuration
+
+project:
+  name: "crewai-test-suite"
+  version: "0.1.0"
+
+target:
+  # Testing mode: "local" or "api"
+  mode: "local"  # "local" = direct import, "api" = deployed crew
+
+  # Local testing (mode: "local")
+  crew_path: "/Users/mischavanoijen/Obsidian/KonectaCoding/code/Crews/flows/simple-rag/src"
+  crew_module: "simple_rag.main"  # Module with run() function
+
+  # API testing (mode: "api") - for deployed crews via CrewAI Enterprise
+  api_url_env_var: "TARGET_API_URL"  # Env var for API URL
+  api_token_env_var: "TARGET_API_TOKEN"  # Env var for Bearer token
+  api_timeout_seconds: 300  # Max wait time for crew response
+  api_poll_interval_seconds: 5  # Poll interval for async kickoff
+
+rag:
+  backend: "ragengine"  # ragengine | qdrant
+  ragengine:
+    mcp_url_env_var: "PG_RAG_MCP_URL"
+    token_env_var: "PG_RAG_TOKEN"
+    corpus_env_var: "PG_RAG_CORPUS"
+    default_results: 5
+    max_results: 10
+  qdrant:
+    url_env_var: "QDRANT_URL"
+    api_key_env_var: "QDRANT_API_KEY"
+    collection_env_var: "QDRANT_COLLECTION"
+    embedding_model: "text-embedding-004"
+    default_results: 5
+    max_results: 10
+
+test_generation:
+  num_tests: 20
+  categories:
+    - factual
+    - reasoning
+    - edge_case
+    - out_of_scope
+    - ambiguous
+  difficulty_distribution:
+    easy: 0.3
+    medium: 0.5
+    hard: 0.2
+  include_conversation_tests: false
+
+execution:
+  max_retries: 2
+  retry_delay_seconds: 1
+  timeout_seconds: 120
+  parallel_execution: false
+
+evaluation:
+  method: "llm_judge"  # embedding_similarity | llm_judge | hybrid
+  pass_threshold: 0.7
+  embedding_model: "text-embedding-004"
+  judge_model: "openai/gemini-2.5-flash"
+
+reporting:
+  output_format: "markdown"  # markdown | json | html
+  include_recommendations: true
+  include_failed_examples: true
+  max_examples_per_category: 3
+
+llm:
+  model: "openai/gemini-2.5-flash"
+  temperature: 0.3

@@ -1,0 +1,86 @@
+analyze_results:
+  description: >
+    Analyze the test results to identify patterns and generate recommendations.
+
+    **Test Results Summary:**
+    - Overall Pass Rate: {pass_rate}%
+    - Total Tests: {total_tests}
+    - Passed: {passed_count}
+    - Failed: {failed_count}
+
+    **Results by Category:**
+    {category_breakdown}
+
+    **Failed Test Examples:**
+    {failed_examples}
+
+    **Analysis Tasks:**
+
+    1. **Failure Pattern Identification**
+       - Which categories have the lowest pass rates?
+       - Are there common characteristics among failed tests?
+       - Do failures cluster around specific topics or question types?
+
+    2. **Root Cause Analysis**
+       - Why are certain categories failing?
+       - Is it a retrieval issue (wrong documents)?
+       - Is it a synthesis issue (correct docs but wrong answer)?
+       - Is it a scope issue (out-of-domain questions)?
+
+    3. **Prompt Improvement Recommendations**
+       - Specific changes to agent role/goal/backstory
+       - Task description improvements
+       - Output format clarifications
+
+    4. **RAG Improvement Recommendations**
+       - Document chunking suggestions
+       - Retrieval parameter tuning
+       - Missing content gaps
+
+    5. **Priority Ranking**
+       - Rank recommendations by expected impact
+       - Identify quick wins vs longer-term fixes
+
+  expected_output: >
+    A comprehensive JSON analysis:
+
+    ```json
+    {
+      "failure_patterns": [
+        {
+          "pattern": "Description of the pattern",
+          "affected_categories": ["category1", "category2"],
+          "frequency": "X% of failures",
+          "example_tests": ["TEST-001", "TEST-005"]
+        }
+      ],
+      "root_causes": [
+        {
+          "cause": "Description of root cause",
+          "evidence": "Supporting evidence from test results",
+          "affected_tests": 5
+        }
+      ],
+      "recommendations": {
+        "prompt_changes": [
+          {
+            "change": "Specific change to make",
+            "rationale": "Why this will help",
+            "priority": "high/medium/low",
+            "expected_impact": "Expected improvement"
+          }
+        ],
+        "rag_changes": [
+          {
+            "change": "Specific RAG configuration change",
+            "rationale": "Why this will help",
+            "priority": "high/medium/low"
+          }
+        ],
+        "priority_order": ["change1", "change2", "change3"]
+      },
+      "summary": "Brief executive summary of findings"
+    }
+    ```
+
+  agent: quality_analyst

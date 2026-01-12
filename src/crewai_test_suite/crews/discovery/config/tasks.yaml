@@ -1,0 +1,52 @@
+discover_knowledge:
+  description: >
+    Query the RAG system using the rag_query tool to discover its knowledge domains.
+
+    Follow this systematic approach:
+
+    1. **Initial Exploration** - Start with broad queries:
+       - "What topics are covered in this knowledge base?"
+       - "What are the main categories of information?"
+       - "What subjects can you help with?"
+
+    2. **Domain Drilling** - For each discovered topic, ask follow-up questions:
+       - "Tell me more about [topic]"
+       - "What specific information is available about [topic]?"
+
+    3. **Boundary Testing** - Try queries that might be out of scope:
+       - Ask about unrelated topics to identify boundaries
+       - Test edge cases and ambiguous queries
+
+    4. **Depth Assessment** - Evaluate how detailed the information is:
+       - Ask specific vs general questions
+       - Note which topics have deep vs shallow coverage
+
+    Use the rag_query tool for each exploration query.
+
+    Crew Description (context about what this RAG is supposed to do):
+    {crew_description}
+
+  expected_output: >
+    A comprehensive JSON summary of the RAG system's knowledge base:
+
+    ```json
+    {
+      "domains": [
+        {
+          "name": "Topic name",
+          "subtopics": ["subtopic1", "subtopic2"],
+          "depth": "high/medium/low",
+          "example_queries": ["query1", "query2"],
+          "sample_facts": ["fact1", "fact2"]
+        }
+      ],
+      "boundaries": ["topic_not_covered1", "topic_not_covered2"],
+      "total_coverage_estimate": "Brief description of overall coverage",
+      "quality_notes": "Any observations about response quality"
+    }
+    ```
+
+    Include at least 3-5 domains with 2-3 subtopics each.
+    List boundaries (topics the RAG doesn't cover) if discovered.
+
+  agent: rag_analyst

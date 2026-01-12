@@ -1,0 +1,63 @@
+generate_prompts:
+  description: >
+    Based on the RAG knowledge summary provided, generate comprehensive suggestions
+    for configuring a CrewAI agent to serve this knowledge base effectively.
+
+    **RAG Summary:**
+    {rag_summary}
+
+    **Crew Description (if provided):**
+    {crew_description}
+
+    Analyze the knowledge domains, their depth, boundaries, and example content.
+    Then generate practical suggestions for:
+
+    1. **Primary Agent Configuration:**
+       - Role: A concise, professional role name
+       - Goal: What the agent should achieve (one sentence)
+       - Backstory: A compelling 2-3 paragraph backstory that establishes
+         expertise, personality, and approach
+
+    2. **System Prompt:**
+       Write a complete system prompt that includes:
+       - Clear identity and purpose
+       - Knowledge domain boundaries
+       - Response guidelines and formatting preferences
+       - How to handle out-of-scope questions
+       - Tone and style guidance
+
+    3. **Example Queries:**
+       - 5-10 example questions the agent should handle well
+       - 3-5 out-of-scope examples the agent should politely decline
+
+    4. **Knowledge Summary & Limitations:**
+       - Brief summary of what the agent knows
+       - Known limitations to acknowledge
+
+  expected_output: >
+    A JSON object with the following structure:
+    {
+      "primary_agent": {
+        "role": "Role Name",
+        "goal": "One sentence goal",
+        "backstory": "Full backstory text...",
+        "tools": ["rag_search", "web_search"],
+        "expertise_areas": ["area1", "area2"]
+      },
+      "supporting_agents": [],
+      "suggested_tasks": [
+        {
+          "name": "answer_query",
+          "description": "Task description",
+          "expected_output": "What the task produces"
+        }
+      ],
+      "system_prompt": "Complete system prompt text...",
+      "example_queries": ["query1", "query2"],
+      "out_of_scope_examples": ["out1", "out2"],
+      "knowledge_summary": "Brief summary of knowledge",
+      "limitations": ["limitation1", "limitation2"],
+      "suggested_tone": "professional/friendly/technical",
+      "response_format_guidance": "Formatting guidance..."
+    }
+  agent: prompt_engineer

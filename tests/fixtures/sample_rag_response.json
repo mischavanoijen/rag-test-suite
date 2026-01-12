@@ -1,0 +1,21 @@
+{
+  "domains": [
+    {
+      "name": "Artificial Intelligence",
+      "subtopics": ["Machine Learning", "Deep Learning", "Natural Language Processing"],
+      "depth": "high",
+      "example_queries": ["What is AI?", "How does machine learning work?"],
+      "sample_facts": ["AI is transforming many industries", "ML uses statistical techniques"]
+    },
+    {
+      "name": "Cloud Computing",
+      "subtopics": ["Infrastructure", "Serverless", "Containers"],
+      "depth": "medium",
+      "example_queries": ["What is cloud computing?", "How do containers work?"],
+      "sample_facts": ["Cloud enables scalable computing", "Containers package applications"]
+    }
+  ],
+  "boundaries": ["Finance regulations", "Legal advice", "Medical diagnosis"],
+  "total_coverage_estimate": "Comprehensive coverage of technology topics with focus on AI and cloud infrastructure",
+  "quality_notes": "Responses are generally accurate with good source citations"
+}

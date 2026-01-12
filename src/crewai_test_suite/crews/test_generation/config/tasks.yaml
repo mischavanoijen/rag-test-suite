@@ -1,0 +1,61 @@
+generate_test_cases:
+  description: >
+    Based on the RAG knowledge summary, generate {num_tests} comprehensive test cases.
+
+    **RAG Knowledge Summary:**
+    {rag_summary}
+
+    **Crew Description (what the crew is supposed to do):**
+    {crew_description}
+
+    **Test Distribution:**
+    - Easy (30%): Direct factual questions with clear, unambiguous answers
+    - Medium (50%): Questions requiring synthesis, context, or multi-step retrieval
+    - Hard (20%): Edge cases, multi-hop reasoning, boundary conditions, ambiguous queries
+
+    **Categories to Include:**
+    {test_categories}
+
+    **For Each Test Case, Provide:**
+    - **id**: Unique identifier (TEST-001, TEST-002, etc.)
+    - **question**: The exact query to send to the crew
+    - **expected_answer**: The ideal response based on RAG content
+    - **category**: One of: factual, reasoning, edge_case, out_of_scope, ambiguous
+    - **difficulty**: easy, medium, or hard
+    - **rationale**: Why this tests an important capability
+
+    **Guidelines:**
+    1. Base questions on actual content discovered in the RAG summary
+    2. Include some out-of-scope questions to test boundary handling
+    3. Vary question formats (what, how, why, compare, explain)
+    4. Include both specific and general questions
+    5. Make expected answers precise but not overly long
+
+  expected_output: >
+    A JSON array of exactly {num_tests} test cases:
+
+    ```json
+    [
+      {
+        "id": "TEST-001",
+        "question": "What is the definition of X?",
+        "expected_answer": "X is defined as... based on the knowledge base content",
+        "category": "factual",
+        "difficulty": "easy",
+        "rationale": "Tests basic knowledge retrieval for core concept"
+      },
+      {
+        "id": "TEST-002",
+        "question": "How does X relate to Y?",
+        "expected_answer": "X and Y are related because...",
+        "category": "reasoning",
+        "difficulty": "medium",
+        "rationale": "Tests ability to connect concepts across documents"
+      }
+    ]
+    ```
+
+    Ensure test cases cover all discovered domains and include variety
+    in categories and difficulty levels.
+
+  agent: test_designer
