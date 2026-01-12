@@ -6,7 +6,7 @@ from pathlib import Path
 from crewai import Agent, Crew, Process, Task, LLM
 from crewai.project import CrewBase, agent, crew, task
 
-from crewai_test_suite.tools.rag_query import RagQueryTool
+from rag_test_suite.tools.rag_query import RagQueryTool
 
 
 @CrewBase

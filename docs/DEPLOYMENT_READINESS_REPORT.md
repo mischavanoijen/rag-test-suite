@@ -1,11 +1,11 @@
 # CrewAI Enterprise Deployment Readiness Report
 
-## Project: crewai-test-suite
+## Project: rag-test-suite
 
-**Path:** `/Users/mischavanoijen/Obsidian/KonectaCoding/code/Crews/flows/crewai-test-suite`
+**Path:** `/Users/mischavanoijen/Obsidian/KonectaCoding/code/Crews/flows/rag-test-suite`
 **Type:** CrewAI Flow
 **Analysis Date:** January 12, 2026
-**GitHub:** https://github.com/mischavanoijen/crewai-test-suite
+**GitHub:** https://github.com/mischavanoijen/rag-test-suite
 
 ---
 
@@ -42,13 +42,13 @@ type = "flow"
 | crewai version | ✅ PASS | `crewai[litellm,tools]==1.8.0` |
 | Python version | ✅ PASS | `>=3.10,<3.14` |
 | Build backend | ✅ PASS | `hatchling` |
-| Project name | ✅ PASS | `crewai_test_suite` (underscores) |
+| Project name | ✅ PASS | `rag_test_suite` (underscores) |
 
 ### 2. Main.py Entry Points ✅
 
 **Flow Class Export:**
 ```python
-from crewai_test_suite.flow import RAGTestSuiteFlow, run_flow
+from rag_test_suite.flow import RAGTestSuiteFlow, run_flow
 
 # Export Flow class for CrewAI Enterprise Flow API detection
 __all__ = ["RAGTestSuiteFlow", "run_flow_entry", "run_flow_with_trigger", "main"]
@@ -56,8 +56,8 @@ __all__ = ["RAGTestSuiteFlow", "run_flow_entry", "run_flow_with_trigger", "main"
 
 **Absolute Imports:**
 ```python
-from crewai_test_suite.flow import RAGTestSuiteFlow, run_flow
-from crewai_test_suite.config.loader import load_settings
+from rag_test_suite.flow import RAGTestSuiteFlow, run_flow
+from rag_test_suite.config.loader import load_settings
 ```
 
 ### 3. Flow kickoff() Override ✅
@@ -81,10 +81,10 @@ def kickoff(self, inputs: Optional[dict] = None) -> str:
 
 ```toml
 [project.scripts]
-kickoff = "crewai_test_suite.main:run_flow_entry"
-run_crew = "crewai_test_suite.main:run_flow_entry"
-run_flow = "crewai_test_suite.main:run_flow_entry"
-run_with_trigger = "crewai_test_suite.main:run_flow_with_trigger"
+kickoff = "rag_test_suite.main:run_flow_entry"
+run_crew = "rag_test_suite.main:run_flow_entry"
+run_flow = "rag_test_suite.main:run_flow_entry"
+run_with_trigger = "rag_test_suite.main:run_flow_with_trigger"
 ```
 
 ### 5. Crew LLM Configuration ✅
@@ -167,7 +167,7 @@ All items **VERIFIED**:
 - [x] `requires-python = ">=3.10,<3.14"`
 - [x] Build backend is `hatchling`
 - [x] `[tool.crewai]` section with `type = "flow"`
-- [x] Project name uses underscores (`crewai_test_suite`)
+- [x] Project name uses underscores (`rag_test_suite`)
 - [x] All scripts defined (kickoff, run_crew, run_flow, run_with_trigger, train, replay, test)
 - [x] Flow class exported in main.py `__all__`
 - [x] Absolute imports only (no relative imports)
@@ -183,7 +183,7 @@ All items **VERIFIED**:
 
 1. Go to CrewAI Studio → Create New
 2. Select **Flow** type
-3. Connect GitHub repository: `mischavanoijen/crewai-test-suite`
+3. Connect GitHub repository: `mischavanoijen/rag-test-suite`
 4. Select branch: `main`
 
 ### 2. Configure Environment Variables
@@ -253,7 +253,7 @@ __all__ = ["RAGTestSuiteFlow", ...]
 
 **Cause:** Using relative imports like `from .flow import ...`
 
-**Solution:** Use absolute imports: `from crewai_test_suite.flow import ...`
+**Solution:** Use absolute imports: `from rag_test_suite.flow import ...`
 
 ---
 
@@ -268,7 +268,7 @@ __all__ = ["RAGTestSuiteFlow", ...]
 
 ## Conclusion
 
-The **crewai-test-suite** project is **fully ready for CrewAI Enterprise deployment**. All critical requirements from the lessons learned have been verified:
+The **rag-test-suite** project is **fully ready for CrewAI Enterprise deployment**. All critical requirements from the lessons learned have been verified:
 
 1. ✅ Correct pyproject.toml configuration for Flow type
 2. ✅ Main.py exports Flow class and uses absolute imports

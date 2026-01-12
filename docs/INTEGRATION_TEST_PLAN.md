@@ -6,7 +6,7 @@
 
 ## Overview
 
-This plan outlines the steps to test the crewai-test-suite against a real RAG Engine MCP backend. We'll use the Market Intelligence (MI) RAG corpus as our test target.
+This plan outlines the steps to test the rag-test-suite against a real RAG Engine MCP backend. We'll use the Market Intelligence (MI) RAG corpus as our test target.
 
 ---
 
@@ -40,7 +40,7 @@ This plan outlines the steps to test the crewai-test-suite against a real RAG En
 1. Create `.env` file with MI RAG credentials
 2. Run a simple Python test to verify connectivity:
    ```python
-   from crewai_test_suite.tools.rag_query import RagQueryTool
+   from rag_test_suite.tools.rag_query import RagQueryTool
 
    tool = RagQueryTool(
        backend="ragengine",
@@ -65,7 +65,7 @@ This plan outlines the steps to test the crewai-test-suite against a real RAG En
 
 **Command:**
 ```bash
-python -m crewai_test_suite.main --run-mode prompt_only
+python -m rag_test_suite.main --run-mode prompt_only
 ```
 
 **Expected Output:**
@@ -86,7 +86,7 @@ python -m crewai_test_suite.main --run-mode prompt_only
 
 **Command:**
 ```bash
-python -m crewai_test_suite.main --run-mode generate_only --num-tests 5
+python -m rag_test_suite.main --run-mode generate_only --num-tests 5
 ```
 
 **Expected Output:**
@@ -115,7 +115,7 @@ python -m crewai_test_suite.main --run-mode generate_only --num-tests 5
 
 2. Run:
    ```bash
-   python -m crewai_test_suite.main \
+   python -m rag_test_suite.main \
      --run-mode execute_only \
      --test-csv tests/integration/mi_tests.csv \
      --target-api-url <MI_GURU_API_URL>
@@ -137,7 +137,7 @@ python -m crewai_test_suite.main --run-mode generate_only --num-tests 5
 
 **Command:**
 ```bash
-python -m crewai_test_suite.main \
+python -m rag_test_suite.main \
   --run-mode full \
   --num-tests 10 \
   --crew-description "Market Intelligence assistant for BPO industry analysis" \
@@ -164,7 +164,7 @@ python -m crewai_test_suite.main \
 1. Configure `simple-rag` locally with MI RAG
 2. Set test suite to use local mode:
    ```bash
-   python -m crewai_test_suite.main \
+   python -m rag_test_suite.main \
      --run-mode full \
      --target-crew-path /path/to/simple-rag
    ```

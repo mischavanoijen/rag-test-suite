@@ -7,7 +7,7 @@ from typing import Optional
 from crewai import Agent, Crew, Process, Task, LLM
 from crewai.project import CrewBase, agent, crew, task
 
-from crewai_test_suite.models import TestResult, CategoryScore
+from rag_test_suite.models import TestResult, CategoryScore
 
 
 @CrewBase

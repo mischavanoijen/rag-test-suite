@@ -8,10 +8,10 @@ from unittest.mock import Mock, patch, MagicMock
 class TestRunDiscovery:
     """Tests for run_discovery function."""
 
-    @patch("crewai_test_suite.crews.discovery.crew.DiscoveryCrew")
+    @patch("rag_test_suite.crews.discovery.crew.DiscoveryCrew")
     def test_run_discovery_success(self, mock_crew_class):
         """Test successful discovery run."""
-        from crewai_test_suite.crews.discovery.crew import run_discovery
+        from rag_test_suite.crews.discovery.crew import run_discovery
 
         mock_crew_instance = MagicMock()
         mock_result = MagicMock()
@@ -32,11 +32,11 @@ class TestRunDiscovery:
         assert result is not None
         assert "AI" in result
 
-    @patch("crewai_test_suite.crews.discovery.crew.DiscoveryCrew")
-    @patch("crewai_test_suite.crews.discovery.crew._create_fallback_summary")
+    @patch("rag_test_suite.crews.discovery.crew.DiscoveryCrew")
+    @patch("rag_test_suite.crews.discovery.crew._create_fallback_summary")
     def test_run_discovery_fallback_on_error(self, mock_fallback, mock_crew_class):
         """Test fallback when discovery fails."""
-        from crewai_test_suite.crews.discovery.crew import run_discovery
+        from rag_test_suite.crews.discovery.crew import run_discovery
 
         mock_crew_class.side_effect = Exception("Crew failed")
         mock_fallback.return_value = json.dumps({
@@ -61,7 +61,7 @@ class TestCreateFallbackSummary:
 
     def test_create_fallback_returns_json(self):
         """Test fallback summary returns valid JSON."""
-        from crewai_test_suite.crews.discovery.crew import _create_fallback_summary
+        from rag_test_suite.crews.discovery.crew import _create_fallback_summary
 
         # Create a mock RAG tool with proper _run method
         mock_rag_tool = MagicMock()
@@ -77,7 +77,7 @@ class TestCreateFallbackSummary:
 
     def test_create_fallback_with_employee_experience_topic(self):
         """Test fallback detects Employee Experience in RAG results."""
-        from crewai_test_suite.crews.discovery.crew import _create_fallback_summary
+        from rag_test_suite.crews.discovery.crew import _create_fallback_summary
 
         mock_rag_tool = MagicMock()
         mock_rag_tool._run.return_value = "Employee Experience portal helps with helpdesk support"
@@ -90,7 +90,7 @@ class TestCreateFallbackSummary:
 
     def test_create_fallback_handles_empty_response(self):
         """Test fallback handles empty RAG response."""
-        from crewai_test_suite.crews.discovery.crew import _create_fallback_summary
+        from rag_test_suite.crews.discovery.crew import _create_fallback_summary
 
         mock_rag_tool = MagicMock()
         mock_rag_tool._run.return_value = ""
@@ -107,7 +107,7 @@ class TestIsValidDiscoveryOutput:
 
     def test_valid_json_with_domains(self):
         """Test valid JSON with domains field."""
-        from crewai_test_suite.crews.discovery.crew import _is_valid_discovery_output
+        from rag_test_suite.crews.discovery.crew import _is_valid_discovery_output
 
         valid_json = '{"domains": [{"name": "Test"}], "total_coverage_estimate": "Test coverage"}'
 
@@ -115,7 +115,7 @@ class TestIsValidDiscoveryOutput:
 
     def test_valid_json_in_markdown(self):
         """Test valid JSON wrapped in markdown."""
-        from crewai_test_suite.crews.discovery.crew import _is_valid_discovery_output
+        from rag_test_suite.crews.discovery.crew import _is_valid_discovery_output
 
         markdown_json = '```json\n{"domains": [], "total_coverage_estimate": "Test"}\n```'
 
@@ -123,7 +123,7 @@ class TestIsValidDiscoveryOutput:
 
     def test_invalid_json(self):
         """Test invalid JSON returns False."""
-        from crewai_test_suite.crews.discovery.crew import _is_valid_discovery_output
+        from rag_test_suite.crews.discovery.crew import _is_valid_discovery_output
 
         invalid = "This is not JSON at all"
 
@@ -131,7 +131,7 @@ class TestIsValidDiscoveryOutput:
 
     def test_json_missing_required_fields(self):
         """Test JSON without required fields."""
-        from crewai_test_suite.crews.discovery.crew import _is_valid_discovery_output
+        from rag_test_suite.crews.discovery.crew import _is_valid_discovery_output
 
         missing_fields = '{"other_field": "value"}'
 

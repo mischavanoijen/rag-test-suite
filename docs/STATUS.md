@@ -6,7 +6,7 @@
 
 ## Executive Summary
 
-The **crewai-test-suite** is a CrewAI Flow that automatically tests RAG-based chat crews. The implementation is **COMPLETE** and **INTEGRATION TESTED** — all core components are built, 145/145 unit tests pass, and the test suite has been validated against a live RAG Engine MCP (Market Intelligence corpus).
+The **rag-test-suite** is a CrewAI Flow that automatically tests RAG-based chat crews. The implementation is **COMPLETE** and **INTEGRATION TESTED** — all core components are built, 145/145 unit tests pass, and the test suite has been validated against a live RAG Engine MCP (Market Intelligence corpus).
 
 ### Recent Updates
 - ✅ **Integration tested** against live MI RAG Engine MCP
@@ -57,14 +57,14 @@ The test suite supports multiple execution modes:
 ## Key Files
 
 ```
-crewai-test-suite/
+rag-test-suite/
 ├── README.md                  # Usage documentation
 ├── pyproject.toml             # Project configuration
 ├── uv.lock                    # Dependency lock file
 ├── .env.example               # Environment variable template
 ├── examples/
 │   └── sample_tests.csv       # Example test cases
-└── src/crewai_test_suite/
+└── src/rag_test_suite/
 ├── flow.py                    # Main Flow orchestration (RAGTestSuiteFlow)
 ├── main.py                    # CLI entry point + CrewAI Enterprise endpoints
 ├── models.py                  # Pydantic models (TestCase, TestResult, etc.)
@@ -117,16 +117,16 @@ crewai-test-suite/
 
 ```bash
 # Generate prompt suggestions only
-python -m crewai_test_suite.main --run-mode prompt_only
+python -m rag_test_suite.main --run-mode prompt_only
 
 # Generate test cases without executing
-python -m crewai_test_suite.main --run-mode generate_only --num-tests 10
+python -m rag_test_suite.main --run-mode generate_only --num-tests 10
 
 # Execute tests from CSV file
-python -m crewai_test_suite.main --run-mode execute_only --test-csv tests.csv
+python -m rag_test_suite.main --run-mode execute_only --test-csv tests.csv
 
 # Full test run with API target
-python -m crewai_test_suite.main \
+python -m rag_test_suite.main \
   --run-mode full \
   --target-api-url https://app.crewai.com/api/v1/crews/123/kickoff \
   --crew-description "Customer support assistant"
@@ -135,7 +135,7 @@ python -m crewai_test_suite.main \
 ### Programmatic Usage
 
 ```python
-from crewai_test_suite.flow import run_flow
+from rag_test_suite.flow import run_flow
 
 result = run_flow(
     target_api_url="https://app.crewai.com/api/v1/crews/123/kickoff",

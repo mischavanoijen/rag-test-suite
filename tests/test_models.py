@@ -2,7 +2,7 @@
 
 import pytest
 
-from crewai_test_suite.models import (
+from rag_test_suite.models import (
     TestCase,
     TestResult,
     TestSuiteState,

@@ -11,7 +11,7 @@ class TestRagEngineQuery:
     @patch("requests.get")
     def test_query_ragengine_success(self, mock_get):
         """Test successful RAG Engine query via SSE."""
-        from crewai_test_suite.tools.rag_query import RagQueryTool
+        from rag_test_suite.tools.rag_query import RagQueryTool
 
         # Setup mock SSE response
         mock_response = Mock()
@@ -43,7 +43,7 @@ class TestRagEngineQuery:
 
     def test_query_ragengine_missing_url(self):
         """Test RAG Engine query with missing URL."""
-        from crewai_test_suite.tools.rag_query import RagQueryTool
+        from rag_test_suite.tools.rag_query import RagQueryTool
 
         tool = RagQueryTool(backend="ragengine", mcp_url="", mcp_token_env_var="TEST_TOKEN")
 
@@ -53,7 +53,7 @@ class TestRagEngineQuery:
 
     def test_query_ragengine_missing_token(self, monkeypatch):
         """Test RAG Engine query with missing token."""
-        from crewai_test_suite.tools.rag_query import RagQueryTool
+        from rag_test_suite.tools.rag_query import RagQueryTool
 
         # Ensure env var is not set
         monkeypatch.delenv("TEST_TOKEN", raising=False)
@@ -75,7 +75,7 @@ class TestQdrantQuery:
     @patch("requests.post")
     def test_query_qdrant_success(self, mock_post):
         """Test successful Qdrant query."""
-        from crewai_test_suite.tools.rag_query import RagQueryTool
+        from rag_test_suite.tools.rag_query import RagQueryTool
 
         # Mock embedding response
         embedding_response = Mock()
@@ -115,7 +115,7 @@ class TestQdrantQuery:
 
     def test_query_qdrant_missing_url(self):
         """Test Qdrant query with missing URL."""
-        from crewai_test_suite.tools.rag_query import RagQueryTool
+        from rag_test_suite.tools.rag_query import RagQueryTool
 
         tool = RagQueryTool(backend="qdrant", qdrant_url="", qdrant_api_key_env_var="KEY")
 
@@ -129,7 +129,7 @@ class TestFormatRagResults:
 
     def test_format_rag_results_standard(self):
         """Test standard RAG result formatting."""
-        from crewai_test_suite.tools.rag_query import RagQueryTool
+        from rag_test_suite.tools.rag_query import RagQueryTool
 
         tool = RagQueryTool(backend="ragengine")
 
@@ -148,7 +148,7 @@ class TestFormatRagResults:
 
     def test_format_empty_results(self):
         """Test formatting empty results."""
-        from crewai_test_suite.tools.rag_query import RagQueryTool
+        from rag_test_suite.tools.rag_query import RagQueryTool
 
         tool = RagQueryTool(backend="ragengine")
 
@@ -161,7 +161,7 @@ class TestFormatRagResults:
 
     def test_format_results_no_chunks(self):
         """Test formatting when no chunks in response."""
-        from crewai_test_suite.tools.rag_query import RagQueryTool
+        from rag_test_suite.tools.rag_query import RagQueryTool
 
         tool = RagQueryTool(backend="ragengine")
 
@@ -177,7 +177,7 @@ class TestGetEmbedding:
     @patch("litellm.embedding")
     def test_get_embedding_success(self, mock_embedding):
         """Test successful embedding generation."""
-        from crewai_test_suite.tools.rag_query import RagQueryTool
+        from rag_test_suite.tools.rag_query import RagQueryTool
 
         # The actual implementation accesses response.data[0]["embedding"] as dict subscript
         mock_embedding.return_value = Mock(
@@ -194,7 +194,7 @@ class TestGetEmbedding:
     @patch("litellm.embedding")
     def test_get_embedding_api_error(self, mock_embedding):
         """Test embedding generation with API error."""
-        from crewai_test_suite.tools.rag_query import RagQueryTool
+        from rag_test_suite.tools.rag_query import RagQueryTool
 
         mock_embedding.side_effect = Exception("API Error")
 
@@ -211,7 +211,7 @@ class TestCreateRagQueryFromConfig:
 
     def test_create_ragengine_from_config(self, monkeypatch):
         """Test creating RAG Engine tool from config."""
-        from crewai_test_suite.tools.rag_query import create_rag_query_from_config
+        from rag_test_suite.tools.rag_query import create_rag_query_from_config
 
         monkeypatch.setenv("PG_RAG_MCP_URL", "https://test-rag.example.com")
         monkeypatch.setenv("PG_RAG_TOKEN", "test-rag-token")
@@ -233,7 +233,7 @@ class TestCreateRagQueryFromConfig:
 
     def test_create_qdrant_from_config(self, monkeypatch):
         """Test creating Qdrant tool from config."""
-        from crewai_test_suite.tools.rag_query import create_rag_query_from_config
+        from rag_test_suite.tools.rag_query import create_rag_query_from_config
 
         monkeypatch.setenv("QDRANT_URL", "https://test-qdrant.example.com")
         monkeypatch.setenv("QDRANT_API_KEY", "test-key")
@@ -259,7 +259,7 @@ class TestToolAttributes:
 
     def test_tool_name(self):
         """Test tool has correct name."""
-        from crewai_test_suite.tools.rag_query import RagQueryTool
+        from rag_test_suite.tools.rag_query import RagQueryTool
 
         tool = RagQueryTool(backend="ragengine")
 
@@ -267,7 +267,7 @@ class TestToolAttributes:
 
     def test_tool_description(self):
         """Test tool has description."""
-        from crewai_test_suite.tools.rag_query import RagQueryTool
+        from rag_test_suite.tools.rag_query import RagQueryTool
 
         tool = RagQueryTool(backend="ragengine")
 
@@ -276,7 +276,7 @@ class TestToolAttributes:
 
     def test_tool_backend_validation(self):
         """Test tool validates backend parameter."""
-        from crewai_test_suite.tools.rag_query import RagQueryTool
+        from rag_test_suite.tools.rag_query import RagQueryTool
 
         # Valid backends should work
         tool_rag = RagQueryTool(backend="ragengine")

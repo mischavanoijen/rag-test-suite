@@ -138,7 +138,7 @@ class RagQueryTool(BaseTool):
                 "params": {
                     "protocolVersion": "2024-11-05",
                     "capabilities": {},
-                    "clientInfo": {"name": "crewai-test-suite", "version": "0.1.0"},
+                    "clientInfo": {"name": "rag-test-suite", "version": "0.1.0"},
                 },
             }
             requests.post(messages_url, json=init_payload, headers=headers, timeout=30)

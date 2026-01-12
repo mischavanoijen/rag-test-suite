@@ -10,7 +10,7 @@ class TestReportingCrew:
 
     def test_crew_initialization(self):
         """Test reporting crew initialization."""
-        from crewai_test_suite.crews.reporting.crew import ReportingCrew
+        from rag_test_suite.crews.reporting.crew import ReportingCrew
 
         crew = ReportingCrew(llm_model="openai/gemini-2.5-flash")
 
@@ -20,11 +20,11 @@ class TestReportingCrew:
 class TestRunReporting:
     """Tests for run_reporting function."""
 
-    @patch("crewai_test_suite.crews.reporting.crew.ReportingCrew")
+    @patch("rag_test_suite.crews.reporting.crew.ReportingCrew")
     def test_run_reporting_success(self, mock_crew_class):
         """Test successful report generation."""
-        from crewai_test_suite.crews.reporting.crew import run_reporting
-        from crewai_test_suite.models import (
+        from rag_test_suite.crews.reporting.crew import run_reporting
+        from rag_test_suite.models import (
             TestCase, TestResult, TestCategory, TestDifficulty, CategoryScore
         )
 
@@ -72,10 +72,10 @@ class TestRunReporting:
         assert report is not None
         assert "Quality Report" in report or "Pass rate" in report
 
-    @patch("crewai_test_suite.crews.reporting.crew.ReportingCrew")
+    @patch("rag_test_suite.crews.reporting.crew.ReportingCrew")
     def test_run_reporting_with_empty_results(self, mock_crew_class):
         """Test report generation with empty results."""
-        from crewai_test_suite.crews.reporting.crew import run_reporting
+        from rag_test_suite.crews.reporting.crew import run_reporting
 
         mock_crew_instance = MagicMock()
         mock_result = MagicMock()
@@ -99,8 +99,8 @@ class TestFormatCategoryTable:
 
     def test_format_category_breakdown_single(self):
         """Test formatting single category."""
-        from crewai_test_suite.crews.evaluation.crew import format_category_breakdown
-        from crewai_test_suite.models import CategoryScore
+        from rag_test_suite.crews.evaluation.crew import format_category_breakdown
+        from rag_test_suite.models import CategoryScore
 
         scores = [
             CategoryScore(
@@ -119,8 +119,8 @@ class TestFormatCategoryTable:
 
     def test_format_category_breakdown_multiple(self):
         """Test formatting multiple categories."""
-        from crewai_test_suite.crews.evaluation.crew import format_category_breakdown
-        from crewai_test_suite.models import CategoryScore
+        from rag_test_suite.crews.evaluation.crew import format_category_breakdown
+        from rag_test_suite.models import CategoryScore
 
         scores = [
             CategoryScore(category="factual", total=10, passed=8, pass_rate=0.8),
@@ -136,7 +136,7 @@ class TestFormatCategoryTable:
 
     def test_format_category_breakdown_empty(self):
         """Test formatting empty categories."""
-        from crewai_test_suite.crews.evaluation.crew import format_category_breakdown
+        from rag_test_suite.crews.evaluation.crew import format_category_breakdown
 
         result = format_category_breakdown([])
 
@@ -148,8 +148,8 @@ class TestFormatFailedExamples:
 
     def test_format_failed_examples_with_failures(self):
         """Test formatting when there are failed tests."""
-        from crewai_test_suite.crews.evaluation.crew import format_failed_examples
-        from crewai_test_suite.models import (
+        from rag_test_suite.crews.evaluation.crew import format_failed_examples
+        from rag_test_suite.models import (
             TestCase, TestResult, TestCategory, TestDifficulty
         )
 
@@ -179,8 +179,8 @@ class TestFormatFailedExamples:
 
     def test_format_failed_examples_no_failures(self):
         """Test formatting when all tests pass."""
-        from crewai_test_suite.crews.evaluation.crew import format_failed_examples
-        from crewai_test_suite.models import (
+        from rag_test_suite.crews.evaluation.crew import format_failed_examples
+        from rag_test_suite.models import (
             TestCase, TestResult, TestCategory, TestDifficulty
         )
 
@@ -214,8 +214,8 @@ class TestCalculateCategoryScores:
 
     def test_calculate_scores_by_category(self):
         """Test calculating scores grouped by category."""
-        from crewai_test_suite.crews.evaluation.crew import calculate_category_scores
-        from crewai_test_suite.models import (
+        from rag_test_suite.crews.evaluation.crew import calculate_category_scores
+        from rag_test_suite.models import (
             TestCase, TestResult, TestCategory, TestDifficulty
         )
 
@@ -263,7 +263,7 @@ class TestCalculateCategoryScores:
 
     def test_calculate_scores_empty_results(self):
         """Test calculating scores with no results."""
-        from crewai_test_suite.crews.evaluation.crew import calculate_category_scores
+        from rag_test_suite.crews.evaluation.crew import calculate_category_scores
 
         scores = calculate_category_scores([])
 

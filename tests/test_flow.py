@@ -8,10 +8,10 @@ from unittest.mock import Mock, patch, MagicMock
 class TestRAGTestSuiteFlowInitialization:
     """Tests for RAGTestSuiteFlow initialization."""
 
-    @patch("crewai_test_suite.flow.create_rag_query_from_config")
-    @patch("crewai_test_suite.flow.create_crew_runner_from_config")
-    @patch("crewai_test_suite.flow.create_evaluator_from_config")
-    @patch("crewai_test_suite.flow.load_settings")
+    @patch("rag_test_suite.flow.create_rag_query_from_config")
+    @patch("rag_test_suite.flow.create_crew_runner_from_config")
+    @patch("rag_test_suite.flow.create_evaluator_from_config")
+    @patch("rag_test_suite.flow.load_settings")
     def test_flow_initialization_default_config(
         self, mock_load_settings, mock_evaluator, mock_runner, mock_rag
     ):
@@ -24,7 +24,7 @@ class TestRAGTestSuiteFlowInitialization:
         mock_runner.return_value = Mock()
         mock_evaluator.return_value = Mock()
 
-        from crewai_test_suite.flow import RAGTestSuiteFlow
+        from rag_test_suite.flow import RAGTestSuiteFlow
 
         flow = RAGTestSuiteFlow()
 
@@ -34,9 +34,9 @@ class TestRAGTestSuiteFlowInitialization:
         assert flow.evaluator is not None
         mock_load_settings.assert_called_once()
 
-    @patch("crewai_test_suite.flow.create_rag_query_from_config")
-    @patch("crewai_test_suite.flow.create_crew_runner_from_config")
-    @patch("crewai_test_suite.flow.create_evaluator_from_config")
+    @patch("rag_test_suite.flow.create_rag_query_from_config")
+    @patch("rag_test_suite.flow.create_crew_runner_from_config")
+    @patch("rag_test_suite.flow.create_evaluator_from_config")
     def test_flow_initialization_custom_config(
         self, mock_evaluator, mock_runner, mock_rag
     ):
@@ -50,17 +50,17 @@ class TestRAGTestSuiteFlowInitialization:
             "llm": {"model": "openai/gpt-4"},
         }
 
-        from crewai_test_suite.flow import RAGTestSuiteFlow
+        from rag_test_suite.flow import RAGTestSuiteFlow
 
         flow = RAGTestSuiteFlow(config=custom_config)
 
         assert flow.config == custom_config
         assert flow.llm_model == "openai/gpt-4"
 
-    @patch("crewai_test_suite.flow.create_rag_query_from_config")
-    @patch("crewai_test_suite.flow.create_crew_runner_from_config")
-    @patch("crewai_test_suite.flow.create_evaluator_from_config")
-    @patch("crewai_test_suite.flow.load_settings")
+    @patch("rag_test_suite.flow.create_rag_query_from_config")
+    @patch("rag_test_suite.flow.create_crew_runner_from_config")
+    @patch("rag_test_suite.flow.create_evaluator_from_config")
+    @patch("rag_test_suite.flow.load_settings")
     def test_flow_state_initialization(
         self, mock_load_settings, mock_evaluator, mock_runner, mock_rag
     ):
@@ -73,7 +73,7 @@ class TestRAGTestSuiteFlowInitialization:
         mock_runner.return_value = Mock()
         mock_evaluator.return_value = Mock()
 
-        from crewai_test_suite.flow import RAGTestSuiteFlow
+        from rag_test_suite.flow import RAGTestSuiteFlow
 
         flow = RAGTestSuiteFlow()
 
@@ -88,10 +88,10 @@ class TestRAGTestSuiteFlowInitialization:
 class TestKickoffInputMapping:
     """Tests for the kickoff method input mapping."""
 
-    @patch("crewai_test_suite.flow.create_rag_query_from_config")
-    @patch("crewai_test_suite.flow.create_crew_runner_from_config")
-    @patch("crewai_test_suite.flow.create_evaluator_from_config")
-    @patch("crewai_test_suite.flow.load_settings")
+    @patch("rag_test_suite.flow.create_rag_query_from_config")
+    @patch("rag_test_suite.flow.create_crew_runner_from_config")
+    @patch("rag_test_suite.flow.create_evaluator_from_config")
+    @patch("rag_test_suite.flow.load_settings")
     def test_kickoff_maps_uppercase_inputs(
         self, mock_load_settings, mock_evaluator, mock_runner, mock_rag
     ):
@@ -104,7 +104,7 @@ class TestKickoffInputMapping:
         mock_runner.return_value = Mock()
         mock_evaluator.return_value = Mock()
 
-        from crewai_test_suite.flow import RAGTestSuiteFlow
+        from rag_test_suite.flow import RAGTestSuiteFlow
 
         flow = RAGTestSuiteFlow()
 
@@ -140,10 +140,10 @@ class TestKickoffInputMapping:
         assert flow.state.pass_threshold == 0.8
         assert flow.state.crew_description == "Test description"
 
-    @patch("crewai_test_suite.flow.create_rag_query_from_config")
-    @patch("crewai_test_suite.flow.create_crew_runner_from_config")
-    @patch("crewai_test_suite.flow.create_evaluator_from_config")
-    @patch("crewai_test_suite.flow.load_settings")
+    @patch("rag_test_suite.flow.create_rag_query_from_config")
+    @patch("rag_test_suite.flow.create_crew_runner_from_config")
+    @patch("rag_test_suite.flow.create_evaluator_from_config")
+    @patch("rag_test_suite.flow.load_settings")
     def test_kickoff_maps_lowercase_inputs(
         self, mock_load_settings, mock_evaluator, mock_runner, mock_rag
     ):
@@ -156,7 +156,7 @@ class TestKickoffInputMapping:
         mock_runner.return_value = Mock()
         mock_evaluator.return_value = Mock()
 
-        from crewai_test_suite.flow import RAGTestSuiteFlow
+        from rag_test_suite.flow import RAGTestSuiteFlow
 
         flow = RAGTestSuiteFlow()
 
@@ -186,10 +186,10 @@ class TestKickoffInputMapping:
         assert flow.state.num_tests == 10
         assert flow.state.pass_threshold == 0.75
 
-    @patch("crewai_test_suite.flow.create_rag_query_from_config")
-    @patch("crewai_test_suite.flow.create_crew_runner_from_config")
-    @patch("crewai_test_suite.flow.create_evaluator_from_config")
-    @patch("crewai_test_suite.flow.load_settings")
+    @patch("rag_test_suite.flow.create_rag_query_from_config")
+    @patch("rag_test_suite.flow.create_crew_runner_from_config")
+    @patch("rag_test_suite.flow.create_evaluator_from_config")
+    @patch("rag_test_suite.flow.load_settings")
     def test_kickoff_uses_defaults_for_missing_inputs(
         self, mock_load_settings, mock_evaluator, mock_runner, mock_rag
     ):
@@ -202,7 +202,7 @@ class TestKickoffInputMapping:
         mock_runner.return_value = Mock()
         mock_evaluator.return_value = Mock()
 
-        from crewai_test_suite.flow import RAGTestSuiteFlow
+        from rag_test_suite.flow import RAGTestSuiteFlow
 
         flow = RAGTestSuiteFlow()
 
@@ -227,10 +227,10 @@ class TestKickoffInputMapping:
 class TestRunFlow:
     """Tests for the run_flow helper function."""
 
-    @patch("crewai_test_suite.flow.RAGTestSuiteFlow")
+    @patch("rag_test_suite.flow.RAGTestSuiteFlow")
     def test_run_flow_api_mode(self, mock_flow_class):
         """Test run_flow in API mode."""
-        from crewai_test_suite.flow import run_flow
+        from rag_test_suite.flow import run_flow
 
         mock_flow_instance = MagicMock()
         mock_flow_instance.kickoff.return_value = "# Test Report\n\nPass rate: 80%"
@@ -245,10 +245,10 @@ class TestRunFlow:
         assert result == "# Test Report\n\nPass rate: 80%"
         mock_flow_instance.kickoff.assert_called_once()
 
-    @patch("crewai_test_suite.flow.RAGTestSuiteFlow")
+    @patch("rag_test_suite.flow.RAGTestSuiteFlow")
     def test_run_flow_local_mode(self, mock_flow_class):
         """Test run_flow in local mode."""
-        from crewai_test_suite.flow import run_flow
+        from rag_test_suite.flow import run_flow
 
         mock_flow_instance = MagicMock()
         mock_flow_instance.kickoff.return_value = "# Local Test Report"
@@ -263,10 +263,10 @@ class TestRunFlow:
         assert mock_flow_instance.state.target_crew_path == "/path/to/crew"
         assert mock_flow_instance.state.target_mode == "local"
 
-    @patch("crewai_test_suite.flow.RAGTestSuiteFlow")
+    @patch("rag_test_suite.flow.RAGTestSuiteFlow")
     def test_run_flow_with_custom_config(self, mock_flow_class):
         """Test run_flow with custom configuration."""
-        from crewai_test_suite.flow import run_flow
+        from rag_test_suite.flow import run_flow
 
         mock_flow_instance = MagicMock()
         mock_flow_instance.kickoff.return_value = "# Custom Report"
@@ -282,11 +282,11 @@ class TestRunFlow:
 class TestFlowPhaseMethods:
     """Tests for individual flow phase methods."""
 
-    @patch("crewai_test_suite.flow.create_rag_query_from_config")
-    @patch("crewai_test_suite.flow.create_crew_runner_from_config")
-    @patch("crewai_test_suite.flow.create_evaluator_from_config")
-    @patch("crewai_test_suite.flow.load_settings")
-    @patch("crewai_test_suite.flow.run_discovery")
+    @patch("rag_test_suite.flow.create_rag_query_from_config")
+    @patch("rag_test_suite.flow.create_crew_runner_from_config")
+    @patch("rag_test_suite.flow.create_evaluator_from_config")
+    @patch("rag_test_suite.flow.load_settings")
+    @patch("rag_test_suite.flow.run_discovery")
     def test_discover_rag_data_success(
         self, mock_run_discovery, mock_load_settings, mock_evaluator, mock_runner, mock_rag
     ):
@@ -304,7 +304,7 @@ class TestFlowPhaseMethods:
             "total_coverage_estimate": "AI topics"
         })
 
-        from crewai_test_suite.flow import RAGTestSuiteFlow
+        from rag_test_suite.flow import RAGTestSuiteFlow
 
         flow = RAGTestSuiteFlow()
         flow.discover_rag_data()
@@ -313,11 +313,11 @@ class TestFlowPhaseMethods:
         assert len(flow.state.rag_summary.domains) == 1
         assert flow.state.rag_summary.domains[0].name == "AI"
 
-    @patch("crewai_test_suite.flow.create_rag_query_from_config")
-    @patch("crewai_test_suite.flow.create_crew_runner_from_config")
-    @patch("crewai_test_suite.flow.create_evaluator_from_config")
-    @patch("crewai_test_suite.flow.load_settings")
-    @patch("crewai_test_suite.flow.run_discovery")
+    @patch("rag_test_suite.flow.create_rag_query_from_config")
+    @patch("rag_test_suite.flow.create_crew_runner_from_config")
+    @patch("rag_test_suite.flow.create_evaluator_from_config")
+    @patch("rag_test_suite.flow.load_settings")
+    @patch("rag_test_suite.flow.run_discovery")
     def test_discover_rag_data_handles_invalid_json(
         self, mock_run_discovery, mock_load_settings, mock_evaluator, mock_runner, mock_rag
     ):
@@ -332,7 +332,7 @@ class TestFlowPhaseMethods:
 
         mock_run_discovery.return_value = "Invalid JSON response from LLM"
 
-        from crewai_test_suite.flow import RAGTestSuiteFlow
+        from rag_test_suite.flow import RAGTestSuiteFlow
 
         flow = RAGTestSuiteFlow()
         flow.discover_rag_data()
@@ -341,16 +341,16 @@ class TestFlowPhaseMethods:
         assert flow.state.rag_summary is not None
         assert "Invalid JSON" in flow.state.rag_summary.total_coverage_estimate
 
-    @patch("crewai_test_suite.flow.create_rag_query_from_config")
-    @patch("crewai_test_suite.flow.create_crew_runner_from_config")
-    @patch("crewai_test_suite.flow.create_evaluator_from_config")
-    @patch("crewai_test_suite.flow.load_settings")
-    @patch("crewai_test_suite.flow.run_prompt_generator")
+    @patch("rag_test_suite.flow.create_rag_query_from_config")
+    @patch("rag_test_suite.flow.create_crew_runner_from_config")
+    @patch("rag_test_suite.flow.create_evaluator_from_config")
+    @patch("rag_test_suite.flow.load_settings")
+    @patch("rag_test_suite.flow.run_prompt_generator")
     def test_generate_prompt_suggestions(
         self, mock_run_prompt_gen, mock_load_settings, mock_evaluator, mock_runner, mock_rag
     ):
         """Test generate_prompt_suggestions method."""
-        from crewai_test_suite.models import (
+        from rag_test_suite.models import (
             PromptSuggestions,
             AgentSuggestion,
             RagSummary,
@@ -381,7 +381,7 @@ class TestFlowPhaseMethods:
         )
         mock_run_prompt_gen.return_value = mock_suggestions
 
-        from crewai_test_suite.flow import RAGTestSuiteFlow
+        from rag_test_suite.flow import RAGTestSuiteFlow
 
         flow = RAGTestSuiteFlow()
         flow.state.rag_summary = RagSummary(
@@ -394,15 +394,15 @@ class TestFlowPhaseMethods:
         assert flow.state.prompt_suggestions is not None
         assert flow.state.prompt_suggestions.primary_agent.role == "Test Agent"
 
-    @patch("crewai_test_suite.flow.create_rag_query_from_config")
-    @patch("crewai_test_suite.flow.create_crew_runner_from_config")
-    @patch("crewai_test_suite.flow.create_evaluator_from_config")
-    @patch("crewai_test_suite.flow.load_settings")
+    @patch("rag_test_suite.flow.create_rag_query_from_config")
+    @patch("rag_test_suite.flow.create_crew_runner_from_config")
+    @patch("rag_test_suite.flow.create_evaluator_from_config")
+    @patch("rag_test_suite.flow.load_settings")
     def test_evaluate_results_calculates_pass_rate(
         self, mock_load_settings, mock_evaluator, mock_runner, mock_rag
     ):
         """Test evaluate_results calculates correct pass rate."""
-        from crewai_test_suite.models import TestCase, TestResult, TestCategory, TestDifficulty
+        from rag_test_suite.models import TestCase, TestResult, TestCategory, TestDifficulty
 
         mock_load_settings.return_value = {
             "target": {"mode": "local"},
@@ -412,7 +412,7 @@ class TestFlowPhaseMethods:
         mock_runner.return_value = Mock()
         mock_evaluator.return_value = Mock()
 
-        from crewai_test_suite.flow import RAGTestSuiteFlow
+        from rag_test_suite.flow import RAGTestSuiteFlow
 
         flow = RAGTestSuiteFlow()
 
@@ -433,9 +433,9 @@ class TestFlowPhaseMethods:
         ]
 
         # Mock the evaluation crew call
-        with patch("crewai_test_suite.flow.run_evaluation") as mock_eval:
+        with patch("rag_test_suite.flow.run_evaluation") as mock_eval:
             mock_eval.return_value = {"recommendations": []}
-            with patch("crewai_test_suite.flow.calculate_category_scores") as mock_calc:
+            with patch("rag_test_suite.flow.calculate_category_scores") as mock_calc:
                 mock_calc.return_value = []
                 flow.evaluate_results()
 
@@ -445,10 +445,10 @@ class TestFlowPhaseMethods:
 class TestFlowHasRequiredMethods:
     """Tests to verify flow has all required methods."""
 
-    @patch("crewai_test_suite.flow.create_rag_query_from_config")
-    @patch("crewai_test_suite.flow.create_crew_runner_from_config")
-    @patch("crewai_test_suite.flow.create_evaluator_from_config")
-    @patch("crewai_test_suite.flow.load_settings")
+    @patch("rag_test_suite.flow.create_rag_query_from_config")
+    @patch("rag_test_suite.flow.create_crew_runner_from_config")
+    @patch("rag_test_suite.flow.create_evaluator_from_config")
+    @patch("rag_test_suite.flow.load_settings")
     def test_flow_has_all_phase_methods(
         self, mock_load_settings, mock_evaluator, mock_runner, mock_rag
     ):
@@ -461,7 +461,7 @@ class TestFlowHasRequiredMethods:
         mock_runner.return_value = Mock()
         mock_evaluator.return_value = Mock()
 
-        from crewai_test_suite.flow import RAGTestSuiteFlow
+        from rag_test_suite.flow import RAGTestSuiteFlow
 
         flow = RAGTestSuiteFlow()
 

@@ -17,7 +17,7 @@ versionHistory:
 
 ## Executive Summary
 
-This document outlines the implementation plan for **crewai-test-suite**, a CrewAI Flow that automatically tests RAG-based chat crews. The system discovers the RAG knowledge base, generates test cases, executes tests, evaluates responses, and produces quality reports with recommendations for prompt improvements.
+This document outlines the implementation plan for **rag-test-suite**, a CrewAI Flow that automatically tests RAG-based chat crews. The system discovers the RAG knowledge base, generates test cases, executes tests, evaluates responses, and produces quality reports with recommendations for prompt improvements.
 
 **Architecture Decision: CrewAI Flow** (not a regular Crew) — This is required because:
 - Multiple distinct phases with dependencies
@@ -113,7 +113,7 @@ The test suite supports two modes: **local testing** (direct import) and **API t
 # config/test-suite-settings.yaml
 
 project:
-  name: "crewai-test-suite"
+  name: "rag-test-suite"
   version: "0.1.0"
 
 target:
@@ -542,13 +542,13 @@ report_writer:
 ## Project Structure
 
 ```
-crewai-test-suite/
+rag-test-suite/
 ├── pyproject.toml
 ├── uv.lock
 ├── .env.example
 ├── README.md
 ├── src/
-│   └── crewai_test_suite/
+│   └── rag_test_suite/
 │       ├── __init__.py
 │       ├── flow.py                    # Main Flow definition
 │       ├── main.py                    # Entry point
@@ -607,7 +607,7 @@ crewai-test-suite/
 
 ### Phase A: Foundation (Week 1)
 
-1. **Scaffold project** using `crewai create flow crewai-test-suite`
+1. **Scaffold project** using `crewai create flow rag-test-suite`
 2. **Create models** (`models.py`) — TestCase, TestResult, TestSuiteState
 3. **Build config loader** — Settings YAML with env overrides
 4. **Create RAG query tool** — Wrapper for target RAG backend
@@ -634,7 +634,7 @@ crewai-test-suite/
 ### Phase E: Integration and Polish (Week 3)
 
 1. **End-to-end testing** with `simple-rag`
-2. **CLI interface** — `python -m crewai_test_suite.main --target=/path/to/crew`
+2. **CLI interface** — `python -m rag_test_suite.main --target=/path/to/crew`
 3. **Documentation** — Usage guide, configuration reference
 4. **CrewAI Studio deployment** — Prepare for cloud deployment
 

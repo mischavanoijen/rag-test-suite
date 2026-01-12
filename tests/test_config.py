@@ -6,7 +6,7 @@ import tempfile
 import pytest
 import yaml
 
-from crewai_test_suite.config.loader import (
+from rag_test_suite.config.loader import (
     load_settings,
     reload_settings,
     _apply_env_overrides,

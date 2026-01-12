@@ -8,7 +8,7 @@
 
 ## Executive Summary
 
-This plan outlines a comprehensive review and improvement of the `crewai-test-suite` project to ensure:
+This plan outlines a comprehensive review and improvement of the `rag-test-suite` project to ensure:
 1. **Complete Unit Test Coverage** (currently 42%, target 80%+)
 2. **CrewAI Enterprise Compliance** (verified ✅)
 3. **Code Maintainability** (refactoring needed)
@@ -336,7 +336,7 @@ def mock_evaluator():
 @pytest.fixture
 def sample_test_case():
     """Sample test case for testing."""
-    from crewai_test_suite.models import TestCase, TestCategory, TestDifficulty
+    from rag_test_suite.models import TestCase, TestCategory, TestDifficulty
     return TestCase(
         id="TEST-001",
         question="What is AI?",
@@ -349,7 +349,7 @@ def sample_test_case():
 @pytest.fixture
 def sample_test_result(sample_test_case):
     """Sample test result for testing."""
-    from crewai_test_suite.models import TestResult
+    from rag_test_suite.models import TestResult
     return TestResult(
         test_case=sample_test_case,
         actual_answer="AI is artificial intelligence",
@@ -361,7 +361,7 @@ def sample_test_result(sample_test_case):
 @pytest.fixture
 def sample_rag_summary():
     """Sample RAG summary for testing."""
-    from crewai_test_suite.models import RagSummary, RagDomain
+    from rag_test_suite.models import RagSummary, RagDomain
     return RagSummary(
         domains=[
             RagDomain(name="AI", subtopics=["ML", "DL"]),

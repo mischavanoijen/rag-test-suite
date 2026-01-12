@@ -17,7 +17,7 @@ load_dotenv()
 
 def test_rag_connectivity():
     """Test that we can connect to and query the RAG Engine MCP."""
-    from crewai_test_suite.tools.rag_query import RagQueryTool
+    from rag_test_suite.tools.rag_query import RagQueryTool
 
     # Get configuration from environment
     mcp_url = os.environ.get("PG_RAG_MCP_URL")
@@ -87,7 +87,7 @@ def test_rag_connectivity():
 
 def test_discovery_topics():
     """Test querying for various topics to understand RAG content."""
-    from crewai_test_suite.tools.rag_query import RagQueryTool
+    from rag_test_suite.tools.rag_query import RagQueryTool
 
     mcp_url = os.environ.get("PG_RAG_MCP_URL")
     corpus = os.environ.get("PG_RAG_CORPUS")

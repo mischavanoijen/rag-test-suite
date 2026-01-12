@@ -1,5 +1,5 @@
 [project]
-name = "crewai_test_suite"
+name = "rag_test_suite"
 version = "0.1.0"
 description = "Automated testing framework for RAG-based CrewAI chat crews"
 authors = [{ name = "Konecta", email = "tech@konecta.com" }]
@@ -13,21 +13,21 @@ dependencies = [
 ]
 
 [project.scripts]
-crewai_test_suite = "crewai_test_suite.main:main"
-kickoff = "crewai_test_suite.main:run_flow_entry"
-run_crew = "crewai_test_suite.main:run_flow_entry"
-run_flow = "crewai_test_suite.main:run_flow_entry"
-run_with_trigger = "crewai_test_suite.main:run_flow_with_trigger"
-train = "crewai_test_suite.main:train"
-replay = "crewai_test_suite.main:replay"
-test = "crewai_test_suite.main:test"
+rag_test_suite = "rag_test_suite.main:main"
+kickoff = "rag_test_suite.main:run_flow_entry"
+run_crew = "rag_test_suite.main:run_flow_entry"
+run_flow = "rag_test_suite.main:run_flow_entry"
+run_with_trigger = "rag_test_suite.main:run_flow_with_trigger"
+train = "rag_test_suite.main:train"
+replay = "rag_test_suite.main:replay"
+test = "rag_test_suite.main:test"
 
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/crewai_test_suite"]
+packages = ["src/rag_test_suite"]
 
 [tool.crewai]
 type = "flow"

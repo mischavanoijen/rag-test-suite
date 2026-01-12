@@ -109,14 +109,14 @@ def run_dry_run_test():
     print("=" * 60)
 
     # Import test suite components
-    from crewai_test_suite.models import (
+    from rag_test_suite.models import (
         TestCase, TestResult, TestSuiteState,
         TestCategory, TestDifficulty, RagDomain, RagSummary
     )
-    from crewai_test_suite.tools.crew_runner import CrewRunnerTool
-    from crewai_test_suite.tools.evaluator import EvaluatorTool
-    from crewai_test_suite.tools.rag_query import RagQueryTool
-    from crewai_test_suite.config.loader import load_settings
+    from rag_test_suite.tools.crew_runner import CrewRunnerTool
+    from rag_test_suite.tools.evaluator import EvaluatorTool
+    from rag_test_suite.tools.rag_query import RagQueryTool
+    from rag_test_suite.config.loader import load_settings
 
     print("\n1. Testing Models...")
     # Test model creation
@@ -170,7 +170,7 @@ def run_dry_run_test():
     print(f"   ✓ Created TestResult: passed={result.passed}, score={result.similarity_score}")
 
     print("\n5. Testing Evaluation Functions...")
-    from crewai_test_suite.crews.evaluation.crew import (
+    from rag_test_suite.crews.evaluation.crew import (
         calculate_category_scores,
         format_category_breakdown,
     )
@@ -199,7 +199,7 @@ def run_full_test(num_tests: int = 5):
     print("=" * 60)
 
     # Load settings to determine mode
-    from crewai_test_suite.config.loader import load_settings
+    from rag_test_suite.config.loader import load_settings
     settings = load_settings()
     mode = settings.get("target", {}).get("mode", "local")
 
@@ -210,8 +210,8 @@ def run_full_test(num_tests: int = 5):
         return False
 
     # Import flow
-    from crewai_test_suite.flow import RAGTestSuiteFlow
-    from crewai_test_suite.models import TestSuiteState
+    from rag_test_suite.flow import RAGTestSuiteFlow
+    from rag_test_suite.models import TestSuiteState
 
     print("\n1. Initializing Test Suite Flow...")
     flow = RAGTestSuiteFlow()

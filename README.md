@@ -1,4 +1,4 @@
-# CrewAI Test Suite
+# RAG Test Suite
 
 Automated testing framework for RAG-based CrewAI chat crews.
 
@@ -44,16 +44,16 @@ cp .env.example .env
 
 ```bash
 # Generate prompt suggestions (discovery only)
-python -m crewai_test_suite.main --run-mode prompt_only
+python -m rag_test_suite.main --run-mode prompt_only
 
 # Generate test cases without executing
-python -m crewai_test_suite.main --run-mode generate_only --num-tests 10
+python -m rag_test_suite.main --run-mode generate_only --num-tests 10
 
 # Execute tests from a CSV file
-python -m crewai_test_suite.main --run-mode execute_only --test-csv examples/sample_tests.csv
+python -m rag_test_suite.main --run-mode execute_only --test-csv examples/sample_tests.csv
 
 # Full test cycle
-python -m crewai_test_suite.main --run-mode full --target-api-url https://...
+python -m rag_test_suite.main --run-mode full --target-api-url https://...
 ```
 
 ---
@@ -149,7 +149,7 @@ RAGTestSuiteFlow
 ## Programmatic Usage
 
 ```python
-from crewai_test_suite.flow import run_flow
+from rag_test_suite.flow import run_flow
 
 result = run_flow(
     target_api_url="https://app.crewai.com/api/v1/crews/123/kickoff",
@@ -172,7 +172,7 @@ pytest tests/ -v
 ### Project Structure
 
 ```
-src/crewai_test_suite/
+src/rag_test_suite/
 ├── flow.py           # Main Flow orchestration
 ├── main.py           # CLI entry point
 ├── models.py         # Pydantic models

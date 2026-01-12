@@ -1,4 +1,4 @@
-"""Shared pytest fixtures for crewai-test-suite tests."""
+"""Shared pytest fixtures for rag-test-suite tests."""
 
 import json
 import pytest
@@ -13,7 +13,7 @@ from unittest.mock import Mock, MagicMock, patch
 @pytest.fixture
 def sample_test_case():
     """Sample test case for testing."""
-    from crewai_test_suite.models import TestCase, TestCategory, TestDifficulty
+    from rag_test_suite.models import TestCase, TestCategory, TestDifficulty
 
     return TestCase(
         id="TEST-001",
@@ -28,7 +28,7 @@ def sample_test_case():
 @pytest.fixture
 def sample_test_case_hard():
     """Sample hard test case for testing."""
-    from crewai_test_suite.models import TestCase, TestCategory, TestDifficulty
+    from rag_test_suite.models import TestCase, TestCategory, TestDifficulty
 
     return TestCase(
         id="TEST-002",
@@ -43,7 +43,7 @@ def sample_test_case_hard():
 @pytest.fixture
 def sample_test_result(sample_test_case):
     """Sample test result for testing."""
-    from crewai_test_suite.models import TestResult
+    from rag_test_suite.models import TestResult
 
     return TestResult(
         test_case=sample_test_case,
@@ -58,7 +58,7 @@ def sample_test_result(sample_test_case):
 @pytest.fixture
 def sample_test_result_failed(sample_test_case_hard):
     """Sample failed test result for testing."""
-    from crewai_test_suite.models import TestResult
+    from rag_test_suite.models import TestResult
 
     return TestResult(
         test_case=sample_test_case_hard,
@@ -73,7 +73,7 @@ def sample_test_result_failed(sample_test_case_hard):
 @pytest.fixture
 def sample_rag_domain():
     """Sample RAG domain for testing."""
-    from crewai_test_suite.models import RagDomain
+    from rag_test_suite.models import RagDomain
 
     return RagDomain(
         name="Artificial Intelligence",
@@ -87,7 +87,7 @@ def sample_rag_domain():
 @pytest.fixture
 def sample_rag_summary(sample_rag_domain):
     """Sample RAG summary for testing."""
-    from crewai_test_suite.models import RagSummary, RagDomain
+    from rag_test_suite.models import RagSummary, RagDomain
 
     return RagSummary(
         domains=[
@@ -106,7 +106,7 @@ def sample_rag_summary(sample_rag_domain):
 @pytest.fixture
 def sample_category_score():
     """Sample category score for testing."""
-    from crewai_test_suite.models import CategoryScore
+    from rag_test_suite.models import CategoryScore
 
     return CategoryScore(
         category="factual",
@@ -120,7 +120,7 @@ def sample_category_score():
 @pytest.fixture
 def sample_agent_suggestion():
     """Sample agent suggestion for testing."""
-    from crewai_test_suite.models import AgentSuggestion
+    from rag_test_suite.models import AgentSuggestion
 
     return AgentSuggestion(
         role="Knowledge Assistant",
@@ -134,7 +134,7 @@ def sample_agent_suggestion():
 @pytest.fixture
 def sample_prompt_suggestions(sample_agent_suggestion):
     """Sample prompt suggestions for testing."""
-    from crewai_test_suite.models import PromptSuggestions, TaskSuggestion
+    from rag_test_suite.models import PromptSuggestions, TaskSuggestion
 
     return PromptSuggestions(
         primary_agent=sample_agent_suggestion,
@@ -159,7 +159,7 @@ def sample_prompt_suggestions(sample_agent_suggestion):
 @pytest.fixture
 def sample_test_suite_state(sample_test_case, sample_test_result, sample_rag_summary):
     """Sample test suite state for testing."""
-    from crewai_test_suite.models import TestSuiteState
+    from rag_test_suite.models import TestSuiteState
 
     state = TestSuiteState(
         target_mode="local",
@@ -221,7 +221,7 @@ def mock_evaluator():
 def sample_config():
     """Sample configuration dictionary for testing."""
     return {
-        "project": {"name": "crewai-test-suite", "version": "0.1.0"},
+        "project": {"name": "rag-test-suite", "version": "0.1.0"},
         "target": {
             "mode": "local",
             "crew_path": "/path/to/simple-rag/src",

@@ -7,7 +7,7 @@ from typing import Optional
 
 from crewai.flow.flow import Flow, listen, start, router
 
-from crewai_test_suite.models import (
+from rag_test_suite.models import (
     TestCase,
     TestResult,
     TestSuiteState,
@@ -18,15 +18,15 @@ from crewai_test_suite.models import (
     TestCategory,
     TestDifficulty,
 )
-from crewai_test_suite.config.loader import load_settings
-from crewai_test_suite.tools.rag_query import RagQueryTool, create_rag_query_from_config
-from crewai_test_suite.tools.crew_runner import CrewRunnerTool, create_crew_runner_from_config
-from crewai_test_suite.tools.evaluator import EvaluatorTool, create_evaluator_from_config
-from crewai_test_suite.crews.discovery.crew import run_discovery
-from crewai_test_suite.crews.prompt_generator.crew import run_prompt_generator
-from crewai_test_suite.crews.test_generation.crew import run_test_generation
-from crewai_test_suite.crews.evaluation.crew import run_evaluation, calculate_category_scores
-from crewai_test_suite.crews.reporting.crew import run_reporting
+from rag_test_suite.config.loader import load_settings
+from rag_test_suite.tools.rag_query import RagQueryTool, create_rag_query_from_config
+from rag_test_suite.tools.crew_runner import CrewRunnerTool, create_crew_runner_from_config
+from rag_test_suite.tools.evaluator import EvaluatorTool, create_evaluator_from_config
+from rag_test_suite.crews.discovery.crew import run_discovery
+from rag_test_suite.crews.prompt_generator.crew import run_prompt_generator
+from rag_test_suite.crews.test_generation.crew import run_test_generation
+from rag_test_suite.crews.evaluation.crew import run_evaluation, calculate_category_scores
+from rag_test_suite.crews.reporting.crew import run_reporting
 
 
 class RAGTestSuiteFlow(Flow[TestSuiteState]):

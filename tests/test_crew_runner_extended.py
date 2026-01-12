@@ -12,7 +12,7 @@ class TestLocalModeExecution:
     @patch("subprocess.run")
     def test_run_local_success(self, mock_run):
         """Test successful local crew execution."""
-        from crewai_test_suite.tools.crew_runner import CrewRunnerTool
+        from rag_test_suite.tools.crew_runner import CrewRunnerTool
 
         mock_result = Mock()
         mock_result.returncode = 0
@@ -33,7 +33,7 @@ class TestLocalModeExecution:
     @patch("subprocess.run")
     def test_run_local_with_special_characters(self, mock_run):
         """Test local execution with special characters in question."""
-        from crewai_test_suite.tools.crew_runner import CrewRunnerTool
+        from rag_test_suite.tools.crew_runner import CrewRunnerTool
 
         mock_result = Mock()
         mock_result.returncode = 0
@@ -55,7 +55,7 @@ class TestLocalModeExecution:
     @patch("subprocess.run")
     def test_run_local_import_error(self, mock_run):
         """Test local execution with import error."""
-        from crewai_test_suite.tools.crew_runner import CrewRunnerTool
+        from rag_test_suite.tools.crew_runner import CrewRunnerTool
 
         mock_result = Mock()
         mock_result.returncode = 1
@@ -76,7 +76,7 @@ class TestLocalModeExecution:
     @patch("subprocess.run")
     def test_run_local_execution_error(self, mock_run):
         """Test local execution with runtime error."""
-        from crewai_test_suite.tools.crew_runner import CrewRunnerTool
+        from rag_test_suite.tools.crew_runner import CrewRunnerTool
 
         mock_result = Mock()
         mock_result.returncode = 1
@@ -97,7 +97,7 @@ class TestLocalModeExecution:
     @patch("subprocess.run")
     def test_run_local_no_markers(self, mock_run):
         """Test local execution when markers are missing."""
-        from crewai_test_suite.tools.crew_runner import CrewRunnerTool
+        from rag_test_suite.tools.crew_runner import CrewRunnerTool
 
         mock_result = Mock()
         mock_result.returncode = 0
@@ -119,7 +119,7 @@ class TestLocalModeExecution:
     @patch("subprocess.run")
     def test_run_local_timeout(self, mock_run):
         """Test local execution with timeout."""
-        from crewai_test_suite.tools.crew_runner import CrewRunnerTool
+        from rag_test_suite.tools.crew_runner import CrewRunnerTool
         import subprocess
 
         mock_run.side_effect = subprocess.TimeoutExpired(cmd="python", timeout=300)
@@ -141,7 +141,7 @@ class TestApiModeExecution:
     @patch("requests.post")
     def test_run_api_sync_response(self, mock_post, monkeypatch):
         """Test API mode with synchronous response."""
-        from crewai_test_suite.tools.crew_runner import CrewRunnerTool
+        from rag_test_suite.tools.crew_runner import CrewRunnerTool
 
         # Set token env var
         monkeypatch.setenv("TARGET_API_TOKEN", "test-token")
@@ -166,7 +166,7 @@ class TestApiModeExecution:
     @patch("requests.post")
     def test_run_api_async_polling(self, mock_post, mock_get, monkeypatch):
         """Test API mode with async response requiring polling."""
-        from crewai_test_suite.tools.crew_runner import CrewRunnerTool
+        from rag_test_suite.tools.crew_runner import CrewRunnerTool
 
         monkeypatch.setenv("TARGET_API_TOKEN", "test-token")
 
@@ -201,7 +201,7 @@ class TestApiModeExecution:
     @patch("requests.post")
     def test_run_api_error_response(self, mock_post, monkeypatch):
         """Test API mode with error response."""
-        from crewai_test_suite.tools.crew_runner import CrewRunnerTool
+        from rag_test_suite.tools.crew_runner import CrewRunnerTool
         import requests
 
         monkeypatch.setenv("TARGET_API_TOKEN", "test-token")
@@ -223,7 +223,7 @@ class TestApiModeExecution:
 
     def test_run_api_missing_token(self, monkeypatch):
         """Test API mode with missing token."""
-        from crewai_test_suite.tools.crew_runner import CrewRunnerTool
+        from rag_test_suite.tools.crew_runner import CrewRunnerTool
 
         # Ensure env var is not set
         monkeypatch.delenv("TARGET_API_TOKEN", raising=False)
@@ -247,7 +247,7 @@ class TestPollForResult:
     @patch("time.sleep", return_value=None)  # Skip sleep in tests
     def test_poll_for_result_success(self, mock_sleep, mock_get, monkeypatch):
         """Test successful polling for result."""
-        from crewai_test_suite.tools.crew_runner import CrewRunnerTool
+        from rag_test_suite.tools.crew_runner import CrewRunnerTool
 
         monkeypatch.setenv("TARGET_API_TOKEN", "test-token")
 
@@ -276,7 +276,7 @@ class TestPollForResult:
     @patch("time.sleep", return_value=None)
     def test_poll_for_result_pending_then_complete(self, mock_sleep, mock_get, monkeypatch):
         """Test polling that starts pending then completes."""
-        from crewai_test_suite.tools.crew_runner import CrewRunnerTool
+        from rag_test_suite.tools.crew_runner import CrewRunnerTool
 
         monkeypatch.setenv("TARGET_API_TOKEN", "test-token")
 
@@ -311,7 +311,7 @@ class TestPollForResult:
     @patch("time.sleep", return_value=None)
     def test_poll_for_result_failed_status(self, mock_sleep, mock_get, monkeypatch):
         """Test polling with failed status."""
-        from crewai_test_suite.tools.crew_runner import CrewRunnerTool
+        from rag_test_suite.tools.crew_runner import CrewRunnerTool
 
         monkeypatch.setenv("TARGET_API_TOKEN", "test-token")
 
@@ -343,7 +343,7 @@ class TestCreateCrewRunnerFromConfig:
 
     def test_create_api_mode_from_config(self, monkeypatch):
         """Test creating API mode runner from config."""
-        from crewai_test_suite.tools.crew_runner import create_crew_runner_from_config
+        from rag_test_suite.tools.crew_runner import create_crew_runner_from_config
 
         monkeypatch.setenv("TARGET_API_URL", "https://app.crewai.com/api/v1/crews/123/kickoff")
 
@@ -362,7 +362,7 @@ class TestCreateCrewRunnerFromConfig:
 
     def test_create_local_mode_from_config(self):
         """Test creating local mode runner from config."""
-        from crewai_test_suite.tools.crew_runner import create_crew_runner_from_config
+        from rag_test_suite.tools.crew_runner import create_crew_runner_from_config
 
         config = {
             "target": {
@@ -384,7 +384,7 @@ class TestToolAttributes:
 
     def test_tool_name(self):
         """Test tool has correct name."""
-        from crewai_test_suite.tools.crew_runner import CrewRunnerTool
+        from rag_test_suite.tools.crew_runner import CrewRunnerTool
 
         tool = CrewRunnerTool(mode="local")
 
@@ -392,7 +392,7 @@ class TestToolAttributes:
 
     def test_tool_description(self):
         """Test tool has description."""
-        from crewai_test_suite.tools.crew_runner import CrewRunnerTool
+        from rag_test_suite.tools.crew_runner import CrewRunnerTool
 
         tool = CrewRunnerTool(mode="local")
 

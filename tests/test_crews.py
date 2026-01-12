@@ -4,9 +4,9 @@ import json
 
 import pytest
 
-from crewai_test_suite.models import TestCase, TestResult, TestCategory, TestDifficulty
-from crewai_test_suite.crews.test_generation.crew import parse_test_cases, _parse_single_test_case
-from crewai_test_suite.crews.evaluation.crew import (
+from rag_test_suite.models import TestCase, TestResult, TestCategory, TestDifficulty
+from rag_test_suite.crews.test_generation.crew import parse_test_cases, _parse_single_test_case
+from rag_test_suite.crews.evaluation.crew import (
     calculate_category_scores,
     format_category_breakdown,
     format_failed_examples,

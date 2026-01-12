@@ -10,7 +10,7 @@ class TestParsePromptSuggestions:
 
     def test_parse_valid_json_in_markdown(self, mock_prompt_suggestions_json):
         """Test parsing valid JSON wrapped in markdown code blocks."""
-        from crewai_test_suite.crews.prompt_generator.crew import (
+        from rag_test_suite.crews.prompt_generator.crew import (
             _parse_prompt_suggestions,
         )
 
@@ -25,7 +25,7 @@ class TestParsePromptSuggestions:
 
     def test_parse_raw_json(self):
         """Test parsing raw JSON without markdown wrapper."""
-        from crewai_test_suite.crews.prompt_generator.crew import (
+        from rag_test_suite.crews.prompt_generator.crew import (
             _parse_prompt_suggestions,
         )
 
@@ -56,7 +56,7 @@ class TestParsePromptSuggestions:
 
     def test_parse_invalid_json_returns_none(self):
         """Test that invalid JSON returns None."""
-        from crewai_test_suite.crews.prompt_generator.crew import (
+        from rag_test_suite.crews.prompt_generator.crew import (
             _parse_prompt_suggestions,
         )
 
@@ -66,7 +66,7 @@ class TestParsePromptSuggestions:
 
     def test_parse_incomplete_json_returns_none(self):
         """Test that incomplete JSON returns None."""
-        from crewai_test_suite.crews.prompt_generator.crew import (
+        from rag_test_suite.crews.prompt_generator.crew import (
             _parse_prompt_suggestions,
         )
 
@@ -76,7 +76,7 @@ class TestParsePromptSuggestions:
 
     def test_parse_json_with_supporting_agents(self):
         """Test parsing JSON with supporting agents."""
-        from crewai_test_suite.crews.prompt_generator.crew import (
+        from rag_test_suite.crews.prompt_generator.crew import (
             _parse_prompt_suggestions,
         )
 
@@ -115,7 +115,7 @@ class TestParsePromptSuggestions:
 
     def test_parse_json_with_suggested_tasks(self):
         """Test parsing JSON with suggested tasks."""
-        from crewai_test_suite.crews.prompt_generator.crew import (
+        from rag_test_suite.crews.prompt_generator.crew import (
             _parse_prompt_suggestions,
         )
 
@@ -162,7 +162,7 @@ class TestCreateDefaultSuggestions:
 
     def test_create_defaults_with_valid_rag_summary(self):
         """Test creating default suggestions with valid RAG summary."""
-        from crewai_test_suite.crews.prompt_generator.crew import (
+        from rag_test_suite.crews.prompt_generator.crew import (
             _create_default_suggestions,
         )
 
@@ -187,7 +187,7 @@ class TestCreateDefaultSuggestions:
 
     def test_create_defaults_with_invalid_json(self):
         """Test creating defaults with invalid JSON summary."""
-        from crewai_test_suite.crews.prompt_generator.crew import (
+        from rag_test_suite.crews.prompt_generator.crew import (
             _create_default_suggestions,
         )
 
@@ -199,7 +199,7 @@ class TestCreateDefaultSuggestions:
 
     def test_create_defaults_with_empty_domains(self):
         """Test creating defaults with empty domains list."""
-        from crewai_test_suite.crews.prompt_generator.crew import (
+        from rag_test_suite.crews.prompt_generator.crew import (
             _create_default_suggestions,
         )
 
@@ -212,7 +212,7 @@ class TestCreateDefaultSuggestions:
 
     def test_create_defaults_system_prompt_content(self):
         """Test that system prompt contains guidelines."""
-        from crewai_test_suite.crews.prompt_generator.crew import (
+        from rag_test_suite.crews.prompt_generator.crew import (
             _create_default_suggestions,
         )
 
@@ -229,10 +229,10 @@ class TestCreateDefaultSuggestions:
 class TestRunPromptGenerator:
     """Tests for run_prompt_generator function."""
 
-    @patch("crewai_test_suite.crews.prompt_generator.crew.PromptGeneratorCrew")
+    @patch("rag_test_suite.crews.prompt_generator.crew.PromptGeneratorCrew")
     def test_run_prompt_generator_success(self, mock_crew_class):
         """Test successful prompt generation."""
-        from crewai_test_suite.crews.prompt_generator.crew import run_prompt_generator
+        from rag_test_suite.crews.prompt_generator.crew import run_prompt_generator
 
         # Setup mock
         mock_crew_instance = MagicMock()
@@ -267,10 +267,10 @@ class TestRunPromptGenerator:
         assert result is not None
         assert result.primary_agent.role == "Test Agent"
 
-    @patch("crewai_test_suite.crews.prompt_generator.crew.PromptGeneratorCrew")
+    @patch("rag_test_suite.crews.prompt_generator.crew.PromptGeneratorCrew")
     def test_run_prompt_generator_fallback_on_parse_error(self, mock_crew_class):
         """Test fallback when parsing fails."""
-        from crewai_test_suite.crews.prompt_generator.crew import run_prompt_generator
+        from rag_test_suite.crews.prompt_generator.crew import run_prompt_generator
 
         # Setup mock to return invalid JSON
         mock_crew_instance = MagicMock()
@@ -289,10 +289,10 @@ class TestRunPromptGenerator:
         assert result is not None
         assert result.primary_agent.role == "Knowledge Assistant"
 
-    @patch("crewai_test_suite.crews.prompt_generator.crew.PromptGeneratorCrew")
+    @patch("rag_test_suite.crews.prompt_generator.crew.PromptGeneratorCrew")
     def test_run_prompt_generator_fallback_on_exception(self, mock_crew_class):
         """Test fallback when crew raises exception."""
-        from crewai_test_suite.crews.prompt_generator.crew import run_prompt_generator
+        from rag_test_suite.crews.prompt_generator.crew import run_prompt_generator
 
         # Setup mock to raise exception
         mock_crew_class.side_effect = Exception("Crew initialization failed")
@@ -314,7 +314,7 @@ class TestPromptGeneratorCrewInitialization:
     @pytest.mark.requires_env
     def test_crew_initialization_default_model(self, mock_env_vars):
         """Test crew initialization with default model."""
-        from crewai_test_suite.crews.prompt_generator.crew import PromptGeneratorCrew
+        from rag_test_suite.crews.prompt_generator.crew import PromptGeneratorCrew
 
         crew = PromptGeneratorCrew()
 
@@ -323,7 +323,7 @@ class TestPromptGeneratorCrewInitialization:
     @pytest.mark.requires_env
     def test_crew_initialization_custom_model(self, mock_env_vars):
         """Test crew initialization with custom model."""
-        from crewai_test_suite.crews.prompt_generator.crew import PromptGeneratorCrew
+        from rag_test_suite.crews.prompt_generator.crew import PromptGeneratorCrew
 
         crew = PromptGeneratorCrew(llm_model="openai/gpt-4")
 

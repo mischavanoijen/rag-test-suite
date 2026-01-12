@@ -7,8 +7,8 @@ from typing import Optional
 
 from dotenv import load_dotenv
 
-from crewai_test_suite.flow import RAGTestSuiteFlow, run_flow
-from crewai_test_suite.config.loader import load_settings
+from rag_test_suite.flow import RAGTestSuiteFlow, run_flow
+from rag_test_suite.config.loader import load_settings
 
 # Export Flow class for CrewAI Enterprise Flow API detection
 __all__ = ["RAGTestSuiteFlow", "run_flow_entry", "run_flow_with_trigger", "main"]
@@ -31,16 +31,16 @@ Run Modes:
 
 Examples:
   # Generate prompt suggestions only
-  python -m crewai_test_suite.main --run-mode prompt_only
+  python -m rag_test_suite.main --run-mode prompt_only
 
   # Generate test questions without executing
-  python -m crewai_test_suite.main --run-mode generate_only --num-tests 10
+  python -m rag_test_suite.main --run-mode generate_only --num-tests 10
 
   # Execute tests from a CSV file
-  python -m crewai_test_suite.main --run-mode execute_only --test-csv tests.csv
+  python -m rag_test_suite.main --run-mode execute_only --test-csv tests.csv
 
   # Full test run with API target
-  python -m crewai_test_suite.main --run-mode full --target-api-url https://...
+  python -m rag_test_suite.main --run-mode full --target-api-url https://...
         """,
     )
     parser.add_argument(

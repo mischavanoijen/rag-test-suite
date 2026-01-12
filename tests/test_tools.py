@@ -6,15 +6,15 @@ from unittest.mock import Mock, patch, MagicMock
 
 import pytest
 
-from crewai_test_suite.tools.crew_runner import (
+from rag_test_suite.tools.crew_runner import (
     CrewRunnerTool,
     create_crew_runner_from_config,
 )
-from crewai_test_suite.tools.evaluator import (
+from rag_test_suite.tools.evaluator import (
     EvaluatorTool,
     create_evaluator_from_config,
 )
-from crewai_test_suite.tools.rag_query import (
+from rag_test_suite.tools.rag_query import (
     RagQueryTool,
     create_rag_query_from_config,
 )
@@ -49,7 +49,7 @@ class TestCrewRunnerTool:
             tool._run("test question")
         assert "not configured" in str(exc_info.value).lower()
 
-    @patch("crewai_test_suite.tools.crew_runner.requests.post")
+    @patch("rag_test_suite.tools.crew_runner.requests.post")
     def test_api_mode_success(self, mock_post):
         """Test successful API call."""
         # Setup mock
@@ -132,7 +132,7 @@ class TestEvaluatorTool:
         assert "Test question?" in prompt
         assert "0.7" in prompt
 
-    @patch("crewai_test_suite.tools.evaluator.requests.post")
+    @patch("rag_test_suite.tools.evaluator.requests.post")
     def test_evaluate_success(self, mock_post):
         """Test successful evaluation."""
         # Setup mock

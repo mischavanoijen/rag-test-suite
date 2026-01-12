@@ -1,4 +1,4 @@
-# CrewAI Test Suite — Project Context
+# RAG Test Suite — Project Context
 
 ## Purpose
 
@@ -53,7 +53,7 @@ For **API mode**, uses CrewAI Enterprise kickoff endpoint.
 
 | Component | Location | Purpose |
 |-----------|----------|---------|
-| Main Flow | `src/crewai_test_suite/flow.py` | Orchestrates phases |
+| Main Flow | `src/rag_test_suite/flow.py` | Orchestrates phases |
 | Discovery Crew | `src/.../crews/discovery/` | Maps RAG knowledge |
 | Prompt Generator | `src/.../crews/prompt_generator/` | Suggests agent configs |
 | Test Gen Crew | `src/.../crews/test_generation/` | Creates test cases |
@@ -62,7 +62,7 @@ For **API mode**, uses CrewAI Enterprise kickoff endpoint.
 
 ## Configuration
 
-Settings file: `src/crewai_test_suite/config/settings.yaml`
+Settings file: `src/rag_test_suite/config/settings.yaml`
 
 Key settings:
 - `target.mode` — `api` or `local`
@@ -112,16 +112,16 @@ Key settings:
 
 ```bash
 # Generate prompt suggestions only
-python -m crewai_test_suite.main --run-mode prompt_only
+python -m rag_test_suite.main --run-mode prompt_only
 
 # Generate tests without executing
-python -m crewai_test_suite.main --run-mode generate_only --num-tests 10
+python -m rag_test_suite.main --run-mode generate_only --num-tests 10
 
 # Execute tests from CSV
-python -m crewai_test_suite.main --run-mode execute_only --test-csv tests.csv
+python -m rag_test_suite.main --run-mode execute_only --test-csv tests.csv
 
 # Full test run with API target
-python -m crewai_test_suite.main \
+python -m rag_test_suite.main \
   --run-mode full \
   --target-api-url https://app.crewai.com/api/v1/crews/123/kickoff \
   --crew-description "Customer support assistant"

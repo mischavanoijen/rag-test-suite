@@ -9,7 +9,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
 def test_rag_connectivity():
     """Test that we can connect to the RAG Engine."""
-    from crewai_test_suite.tools.rag_query import RagQueryTool
+    from rag_test_suite.tools.rag_query import RagQueryTool
 
     # Get credentials from env (note: mcp_token_env_var is used, not direct token)
     mcp_url = os.environ.get("PG_RAG_MCP_URL", "")
