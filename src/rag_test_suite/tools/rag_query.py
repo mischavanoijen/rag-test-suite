@@ -291,24 +291,20 @@ class RagQueryTool(BaseTool):
             return f"Qdrant Error: {e}"
 
     def _get_embedding(self, text: str) -> Optional[list[float]]:
-        """Get embedding for text using LiteLLM."""
-        try:
-            import litellm
+        """Get embedding for text using LiteLLM proxy (OpenAI-compatible).
 
-            response = litellm.embedding(
-                model=f"vertex_ai/{self.embedding_model}",
-                input=[text],
-            )
-            return response.data[0]["embedding"]
-        except Exception:
-            # Fallback: try OpenAI-compatible endpoint
+        Uses the LiteLLM proxy configured via OPENAI_API_KEY/OPENAI_API_BASE
+        environment variables. This is the preferred method for CrewAI Enterprise
+        deployment as it doesn't require direct Google Cloud credentials.
+
+        Falls back to direct litellm only if proxy is not configured (for local dev).
+        """
+        api_key = os.environ.get("OPENAI_API_KEY", "")
+        api_base = os.environ.get("OPENAI_API_BASE", "")
+
+        # Prefer LiteLLM proxy (works in CrewAI Enterprise)
+        if api_base and api_key:
             try:
-                api_key = os.environ.get("OPENAI_API_KEY", "")
-                api_base = os.environ.get("OPENAI_API_BASE", "")
-
-                if not api_base:
-                    return None
-
                 headers = {
                     "Authorization": f"Bearer {api_key}",
                     "Content-Type": "application/json",
@@ -324,8 +320,24 @@ class RagQueryTool(BaseTool):
                 resp.raise_for_status()
                 data = resp.json()
                 return data["data"][0]["embedding"]
-            except Exception:
-                return None
+            except Exception as e:
+                print(f"Embedding via proxy failed: {e}")
+                # Fall through to direct litellm attempt
+
+        # Fallback: direct litellm (for local development only)
+        # Note: This requires Google Cloud credentials which are NOT available
+        # in CrewAI Enterprise. Only use for local testing.
+        try:
+            import litellm
+
+            response = litellm.embedding(
+                model=f"vertex_ai/{self.embedding_model}",
+                input=[text],
+            )
+            return response.data[0]["embedding"]
+        except Exception as e:
+            print(f"Direct embedding failed: {e}")
+            return None
 
 
 def create_rag_query_from_config(config: dict) -> RagQueryTool:
