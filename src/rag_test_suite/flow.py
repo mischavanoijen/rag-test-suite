@@ -2,6 +2,7 @@
 
 import csv
 import json
+import os
 import time
 from typing import Optional
 
@@ -69,8 +70,10 @@ class RAGTestSuiteFlow(Flow[TestSuiteState]):
         Supported inputs:
         - RUN_MODE: full, prompt_only, generate_only, execute_only, generate_and_execute
         - TEST_CSV_PATH: Path to CSV file with test cases (for execute_only mode)
-        - TARGET_MODE, TARGET_API_URL, TARGET_CREW_PATH: Target crew configuration
-        - RAG_ENDPOINT, RAG_BACKEND: RAG configuration
+        - TARGET_MODE, TARGET_API_URL, TARGET_API_TOKEN, TARGET_CREW_PATH: Target crew config
+        - RAG_BACKEND: "ragengine" or "qdrant"
+        - RAG_MCP_URL, RAG_MCP_TOKEN, RAG_CORPUS: RAG Engine (MCP) configuration
+        - RAG_QDRANT_URL, RAG_QDRANT_API_KEY, RAG_QDRANT_COLLECTION: Qdrant configuration
         - NUM_TESTS, PASS_THRESHOLD, MAX_RETRIES: Test parameters
         - CREW_DESCRIPTION: Description of what the crew does
         """
@@ -92,22 +95,72 @@ class RAGTestSuiteFlow(Flow[TestSuiteState]):
                 inputs.get("TEST_CSV_PATH") or inputs.get("test_csv_path") or ""
             )
 
-            # Map other inputs to state
+            # Target crew configuration
             self.state.target_mode = (
                 inputs.get("TARGET_MODE") or inputs.get("target_mode") or "api"
             )
             self.state.target_api_url = (
                 inputs.get("TARGET_API_URL") or inputs.get("target_api_url") or ""
             )
+            target_api_token = (
+                inputs.get("TARGET_API_TOKEN") or inputs.get("target_api_token") or ""
+            )
+            if target_api_token:
+                self.state.target_api_token = target_api_token
+                os.environ["TARGET_API_TOKEN"] = target_api_token
             self.state.target_crew_path = (
                 inputs.get("TARGET_CREW_PATH") or inputs.get("target_crew_path") or ""
             )
-            self.state.rag_endpoint = (
-                inputs.get("RAG_ENDPOINT") or inputs.get("rag_endpoint") or ""
-            )
-            self.state.rag_backend = (
+
+            # RAG backend configuration
+            rag_backend = (
                 inputs.get("RAG_BACKEND") or inputs.get("rag_backend") or "ragengine"
-            )
+            ).lower()
+            self.state.rag_backend = rag_backend
+
+            # RAG Engine (MCP) configuration
+            rag_mcp_url = inputs.get("RAG_MCP_URL") or inputs.get("rag_mcp_url") or ""
+            rag_mcp_token = inputs.get("RAG_MCP_TOKEN") or inputs.get("rag_mcp_token") or ""
+            rag_corpus = inputs.get("RAG_CORPUS") or inputs.get("rag_corpus") or ""
+
+            # Qdrant configuration
+            rag_qdrant_url = inputs.get("RAG_QDRANT_URL") or inputs.get("rag_qdrant_url") or ""
+            rag_qdrant_api_key = inputs.get("RAG_QDRANT_API_KEY") or inputs.get("rag_qdrant_api_key") or ""
+            rag_qdrant_collection = inputs.get("RAG_QDRANT_COLLECTION") or inputs.get("rag_qdrant_collection") or ""
+
+            # Legacy RAG_ENDPOINT support (deprecated)
+            rag_endpoint = inputs.get("RAG_ENDPOINT") or inputs.get("rag_endpoint") or ""
+            if rag_endpoint and not rag_mcp_url:
+                rag_mcp_url = rag_endpoint
+            self.state.rag_endpoint = rag_endpoint
+
+            # Store RAG config in state
+            self.state.rag_mcp_url = rag_mcp_url
+            self.state.rag_corpus = rag_corpus
+            self.state.rag_qdrant_url = rag_qdrant_url
+            self.state.rag_qdrant_collection = rag_qdrant_collection
+
+            # Reconfigure RAG tool based on API inputs
+            if rag_backend == "ragengine" and rag_mcp_url and rag_corpus:
+                print(f"Configuring RAG Engine: {self._mask_url(rag_mcp_url)}")
+                if rag_mcp_token:
+                    os.environ["PG_RAG_TOKEN"] = rag_mcp_token
+                self.rag_tool = RagQueryTool(
+                    backend="ragengine",
+                    mcp_url=rag_mcp_url,
+                    corpus=rag_corpus,
+                )
+            elif rag_backend == "qdrant" and rag_qdrant_url and rag_qdrant_collection:
+                print(f"Configuring Qdrant: {self._mask_url(rag_qdrant_url)}")
+                if rag_qdrant_api_key:
+                    os.environ["QDRANT_API_KEY"] = rag_qdrant_api_key
+                self.rag_tool = RagQueryTool(
+                    backend="qdrant",
+                    qdrant_url=rag_qdrant_url,
+                    collection=rag_qdrant_collection,
+                )
+
+            # Test parameters
             self.state.num_tests = int(
                 inputs.get("NUM_TESTS") or inputs.get("num_tests") or 20
             )
@@ -121,17 +174,34 @@ class RAGTestSuiteFlow(Flow[TestSuiteState]):
                 inputs.get("CREW_DESCRIPTION") or inputs.get("crew_description") or ""
             )
 
-            # Update tools with new config if provided
+            # Update crew runner with target config
             if self.state.target_api_url:
                 self.crew_runner.api_url = self.state.target_api_url
                 self.crew_runner.mode = "api"
 
         print(f"\n{'=' * 60}")
-        print(f"CREWAI TEST SUITE - Run Mode: {self.state.run_mode.upper()}")
+        print(f"RAG TEST SUITE - Run Mode: {self.state.run_mode.upper()}")
+        print(f"RAG Backend: {self.state.rag_backend}")
+        if self.state.rag_mcp_url:
+            print(f"RAG MCP URL: {self._mask_url(self.state.rag_mcp_url)}")
+        if self.state.rag_qdrant_url:
+            print(f"Qdrant URL: {self._mask_url(self.state.rag_qdrant_url)}")
         print(f"{'=' * 60}\n")
 
         # Call parent kickoff
         return super().kickoff()
+
+    def _mask_url(self, url: str) -> str:
+        """Mask sensitive parts of URL for logging."""
+        if not url:
+            return ""
+        # Show domain but mask path details
+        try:
+            from urllib.parse import urlparse
+            parsed = urlparse(url)
+            return f"{parsed.scheme}://{parsed.netloc}/..."
+        except Exception:
+            return url[:30] + "..." if len(url) > 30 else url
 
     # ─────────────────────────────────────────────────────────────
     # ENTRY POINT WITH ROUTER
@@ -582,8 +652,16 @@ class RAGTestSuiteFlow(Flow[TestSuiteState]):
 
 def run_flow(
     target_api_url: str = "",
+    target_api_token: str = "",
     target_crew_path: str = "",
     rag_endpoint: str = "",
+    rag_backend: str = "ragengine",
+    rag_mcp_url: str = "",
+    rag_mcp_token: str = "",
+    rag_corpus: str = "",
+    rag_qdrant_url: str = "",
+    rag_qdrant_api_key: str = "",
+    rag_qdrant_collection: str = "",
     num_tests: int = 20,
     crew_description: str = "",
     run_mode: str = "full",
@@ -595,8 +673,16 @@ def run_flow(
 
     Args:
         target_api_url: CrewAI Enterprise API URL for the target crew
+        target_api_token: Bearer token for target crew API
         target_crew_path: Path to local crew (if testing locally)
-        rag_endpoint: RAG endpoint URL
+        rag_endpoint: RAG endpoint URL (deprecated, use rag_mcp_url)
+        rag_backend: RAG backend type ('ragengine' or 'qdrant')
+        rag_mcp_url: RAG Engine MCP server URL
+        rag_mcp_token: Bearer token for RAG Engine MCP
+        rag_corpus: RAG corpus name/path
+        rag_qdrant_url: Qdrant server URL
+        rag_qdrant_api_key: Qdrant API key
+        rag_qdrant_collection: Qdrant collection name
         num_tests: Number of tests to generate
         crew_description: Description of what the crew should do
         run_mode: Execution mode (full, prompt_only, generate_only, execute_only)
@@ -612,25 +698,46 @@ def run_flow(
     """
     flow = RAGTestSuiteFlow(config=config)
 
-    # Initialize state
+    # Initialize state with basic settings
     flow.state.run_mode = run_mode
     flow.state.test_csv_path = test_csv_path
     flow.state.target_api_url = target_api_url
+    flow.state.target_api_token = target_api_token
     flow.state.target_crew_path = target_crew_path
     flow.state.target_mode = "api" if target_api_url else "local"
     flow.state.rag_endpoint = rag_endpoint
     flow.state.num_tests = num_tests
     flow.state.crew_description = crew_description
 
+    # Initialize RAG configuration in state
+    flow.state.rag_backend = rag_backend
+    flow.state.rag_mcp_url = rag_mcp_url
+    flow.state.rag_corpus = rag_corpus
+    flow.state.rag_qdrant_url = rag_qdrant_url
+    flow.state.rag_qdrant_collection = rag_qdrant_collection
+
     # Update crew runner with target
     if target_api_url:
         flow.crew_runner.api_url = target_api_url
+        if target_api_token:
+            flow.crew_runner.api_token = target_api_token
         flow.crew_runner.mode = "api"
     elif target_crew_path:
         flow.crew_runner.crew_path = target_crew_path
         flow.crew_runner.mode = "local"
 
-    # Run the flow
-    result = flow.kickoff()
+    # Build inputs dict for kickoff (for RAG tool reconfiguration)
+    inputs = {
+        "RAG_BACKEND": rag_backend,
+        "RAG_MCP_URL": rag_mcp_url,
+        "RAG_MCP_TOKEN": rag_mcp_token,
+        "RAG_CORPUS": rag_corpus,
+        "RAG_QDRANT_URL": rag_qdrant_url,
+        "RAG_QDRANT_API_KEY": rag_qdrant_api_key,
+        "RAG_QDRANT_COLLECTION": rag_qdrant_collection,
+    }
+
+    # Run the flow with inputs for RAG configuration
+    result = flow.kickoff(inputs=inputs)
 
     return result

@@ -125,15 +125,37 @@ def run_flow_entry():
     # Read inputs from environment variables
     run_mode = os.environ.get("RUN_MODE", "full").strip().lower()
     test_csv_path = os.environ.get("TEST_CSV_PATH", "").strip()
+
+    # Target crew configuration
     target_api_url = os.environ.get("TARGET_API_URL", "").strip()
+    target_api_token = os.environ.get("TARGET_API_TOKEN", "").strip()
     target_crew_path = os.environ.get("TARGET_CREW_PATH", "").strip()
+
+    # RAG configuration
+    rag_backend = os.environ.get("RAG_BACKEND", "ragengine").strip().lower()
+    rag_mcp_url = os.environ.get("RAG_MCP_URL", "").strip()
+    rag_mcp_token = os.environ.get("RAG_MCP_TOKEN", "").strip()
+    rag_corpus = os.environ.get("RAG_CORPUS", "").strip()
+    rag_qdrant_url = os.environ.get("RAG_QDRANT_URL", "").strip()
+    rag_qdrant_api_key = os.environ.get("RAG_QDRANT_API_KEY", "").strip()
+    rag_qdrant_collection = os.environ.get("RAG_QDRANT_COLLECTION", "").strip()
+
+    # Test parameters
     num_tests = int(os.environ.get("NUM_TESTS", "20"))
     crew_description = os.environ.get("CREW_DESCRIPTION", "").strip()
 
     # Run the flow
     result = run_flow(
         target_api_url=target_api_url,
+        target_api_token=target_api_token,
         target_crew_path=target_crew_path,
+        rag_backend=rag_backend,
+        rag_mcp_url=rag_mcp_url,
+        rag_mcp_token=rag_mcp_token,
+        rag_corpus=rag_corpus,
+        rag_qdrant_url=rag_qdrant_url,
+        rag_qdrant_api_key=rag_qdrant_api_key,
+        rag_qdrant_collection=rag_qdrant_collection,
         num_tests=num_tests,
         crew_description=crew_description,
         run_mode=run_mode,

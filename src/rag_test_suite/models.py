@@ -183,12 +183,23 @@ class TestSuiteState(BaseModel):
         description="Path to CSV file with test cases (for execute_only mode)"
     )
 
-    # Configuration
+    # Target crew configuration
     target_mode: str = Field(default="api", description="Testing mode: 'api' or 'local'")
     target_api_url: str = Field(default="", description="CrewAI Enterprise API URL")
+    target_api_token: str = Field(default="", description="Bearer token for target crew (not logged)")
     target_crew_path: str = Field(default="", description="Path to crew for local testing")
-    rag_endpoint: str = Field(default="", description="RAG endpoint URL")
-    rag_backend: str = Field(default="ragengine", description="RAG backend type")
+
+    # RAG configuration (API-configurable)
+    rag_backend: str = Field(default="ragengine", description="RAG backend type: 'ragengine' or 'qdrant'")
+    rag_endpoint: str = Field(default="", description="RAG endpoint URL (deprecated, use rag_mcp_url)")
+    # RAG Engine (MCP) settings
+    rag_mcp_url: str = Field(default="", description="RAG Engine MCP server URL")
+    rag_corpus: str = Field(default="", description="RAG corpus name/path")
+    # Qdrant settings
+    rag_qdrant_url: str = Field(default="", description="Qdrant server URL")
+    rag_qdrant_collection: str = Field(default="", description="Qdrant collection name")
+
+    # Test configuration
     num_tests: int = Field(default=20, description="Number of tests to generate")
     pass_threshold: float = Field(default=0.7, description="Pass/fail threshold")
     max_retries: int = Field(default=2, description="Max retries per test")

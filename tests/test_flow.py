@@ -479,3 +479,309 @@ class TestFlowHasRequiredMethods:
 
         # Override method
         assert hasattr(flow, "kickoff")
+
+
+class TestRAGAPIConfiguration:
+    """Tests for RAG API configuration via kickoff inputs."""
+
+    @patch("rag_test_suite.flow.RagQueryTool")
+    @patch("rag_test_suite.flow.create_rag_query_from_config")
+    @patch("rag_test_suite.flow.create_crew_runner_from_config")
+    @patch("rag_test_suite.flow.create_evaluator_from_config")
+    @patch("rag_test_suite.flow.load_settings")
+    def test_kickoff_reconfigures_ragengine_from_inputs(
+        self, mock_load_settings, mock_evaluator, mock_runner, mock_rag_config, mock_rag_tool_class
+    ):
+        """Test that kickoff reconfigures RAG tool when RAG Engine inputs provided."""
+        mock_load_settings.return_value = {
+            "target": {"mode": "local"},
+            "llm": {"model": "openai/gemini-2.5-flash"},
+        }
+        mock_rag_config.return_value = Mock()
+        mock_runner.return_value = Mock()
+        mock_evaluator.return_value = Mock()
+        mock_new_rag_tool = Mock()
+        mock_rag_tool_class.return_value = mock_new_rag_tool
+
+        from rag_test_suite.flow import RAGTestSuiteFlow
+
+        flow = RAGTestSuiteFlow()
+
+        # Store original rag_tool
+        original_rag_tool = flow.rag_tool
+
+        # Call kickoff with RAG Engine inputs
+        inputs = {
+            "RAG_BACKEND": "ragengine",
+            "RAG_MCP_URL": "https://rag-engine.example.com/mcp",
+            "RAG_MCP_TOKEN": "test-token-123",
+            "RAG_CORPUS": "test-corpus",
+        }
+
+        # Mock the parent kickoff to avoid running the full flow
+        with patch.object(flow.__class__.__bases__[0], 'kickoff', return_value="test result"):
+            flow.kickoff(inputs=inputs)
+
+        # Verify RagQueryTool was instantiated with new config
+        mock_rag_tool_class.assert_called_once_with(
+            backend="ragengine",
+            mcp_url="https://rag-engine.example.com/mcp",
+            corpus="test-corpus",
+        )
+
+        # Verify state was updated
+        assert flow.state.rag_backend == "ragengine"
+        assert flow.state.rag_mcp_url == "https://rag-engine.example.com/mcp"
+        assert flow.state.rag_corpus == "test-corpus"
+
+    @patch("rag_test_suite.flow.RagQueryTool")
+    @patch("rag_test_suite.flow.create_rag_query_from_config")
+    @patch("rag_test_suite.flow.create_crew_runner_from_config")
+    @patch("rag_test_suite.flow.create_evaluator_from_config")
+    @patch("rag_test_suite.flow.load_settings")
+    def test_kickoff_reconfigures_qdrant_from_inputs(
+        self, mock_load_settings, mock_evaluator, mock_runner, mock_rag_config, mock_rag_tool_class
+    ):
+        """Test that kickoff reconfigures RAG tool when Qdrant inputs provided."""
+        mock_load_settings.return_value = {
+            "target": {"mode": "local"},
+            "llm": {"model": "openai/gemini-2.5-flash"},
+        }
+        mock_rag_config.return_value = Mock()
+        mock_runner.return_value = Mock()
+        mock_evaluator.return_value = Mock()
+        mock_new_rag_tool = Mock()
+        mock_rag_tool_class.return_value = mock_new_rag_tool
+
+        from rag_test_suite.flow import RAGTestSuiteFlow
+
+        flow = RAGTestSuiteFlow()
+
+        # Call kickoff with Qdrant inputs
+        inputs = {
+            "RAG_BACKEND": "qdrant",
+            "RAG_QDRANT_URL": "https://qdrant.example.com:6333",
+            "RAG_QDRANT_API_KEY": "qdrant-api-key-123",
+            "RAG_QDRANT_COLLECTION": "test-collection",
+        }
+
+        # Mock the parent kickoff
+        with patch.object(flow.__class__.__bases__[0], 'kickoff', return_value="test result"):
+            flow.kickoff(inputs=inputs)
+
+        # Verify RagQueryTool was instantiated with Qdrant config
+        mock_rag_tool_class.assert_called_once_with(
+            backend="qdrant",
+            qdrant_url="https://qdrant.example.com:6333",
+            collection="test-collection",
+        )
+
+        # Verify state was updated
+        assert flow.state.rag_backend == "qdrant"
+        assert flow.state.rag_qdrant_url == "https://qdrant.example.com:6333"
+        assert flow.state.rag_qdrant_collection == "test-collection"
+
+    @patch("rag_test_suite.flow.create_rag_query_from_config")
+    @patch("rag_test_suite.flow.create_crew_runner_from_config")
+    @patch("rag_test_suite.flow.create_evaluator_from_config")
+    @patch("rag_test_suite.flow.load_settings")
+    def test_kickoff_does_not_reconfigure_without_required_fields(
+        self, mock_load_settings, mock_evaluator, mock_runner, mock_rag
+    ):
+        """Test that kickoff doesn't reconfigure RAG tool without all required fields."""
+        mock_load_settings.return_value = {
+            "target": {"mode": "local"},
+            "llm": {"model": "openai/gemini-2.5-flash"},
+        }
+        original_rag_tool = Mock()
+        mock_rag.return_value = original_rag_tool
+        mock_runner.return_value = Mock()
+        mock_evaluator.return_value = Mock()
+
+        from rag_test_suite.flow import RAGTestSuiteFlow
+
+        flow = RAGTestSuiteFlow()
+
+        # Call kickoff with incomplete RAG Engine inputs (missing corpus)
+        inputs = {
+            "RAG_BACKEND": "ragengine",
+            "RAG_MCP_URL": "https://rag-engine.example.com/mcp",
+            # Missing RAG_CORPUS
+        }
+
+        # Mock the parent kickoff
+        with patch.object(flow.__class__.__bases__[0], 'kickoff', return_value="test result"):
+            flow.kickoff(inputs=inputs)
+
+        # Verify original RAG tool is still in use
+        assert flow.rag_tool == original_rag_tool
+
+    @patch("rag_test_suite.flow.create_rag_query_from_config")
+    @patch("rag_test_suite.flow.create_crew_runner_from_config")
+    @patch("rag_test_suite.flow.create_evaluator_from_config")
+    @patch("rag_test_suite.flow.load_settings")
+    def test_kickoff_handles_lowercase_input_keys(
+        self, mock_load_settings, mock_evaluator, mock_runner, mock_rag
+    ):
+        """Test that kickoff accepts lowercase input keys."""
+        mock_load_settings.return_value = {
+            "target": {"mode": "local"},
+            "llm": {"model": "openai/gemini-2.5-flash"},
+        }
+        mock_rag.return_value = Mock()
+        mock_runner.return_value = Mock()
+        mock_evaluator.return_value = Mock()
+
+        from rag_test_suite.flow import RAGTestSuiteFlow
+
+        flow = RAGTestSuiteFlow()
+
+        # Call kickoff with lowercase inputs
+        inputs = {
+            "rag_backend": "ragengine",
+            "num_tests": "25",
+            "crew_description": "Test crew description",
+        }
+
+        # Mock the parent kickoff
+        with patch.object(flow.__class__.__bases__[0], 'kickoff', return_value="test result"):
+            flow.kickoff(inputs=inputs)
+
+        # Verify state was updated from lowercase keys
+        assert flow.state.rag_backend == "ragengine"
+        assert flow.state.num_tests == 25
+        assert flow.state.crew_description == "Test crew description"
+
+    @patch("rag_test_suite.flow.create_rag_query_from_config")
+    @patch("rag_test_suite.flow.create_crew_runner_from_config")
+    @patch("rag_test_suite.flow.create_evaluator_from_config")
+    @patch("rag_test_suite.flow.load_settings")
+    def test_mask_url_hides_sensitive_parts(
+        self, mock_load_settings, mock_evaluator, mock_runner, mock_rag
+    ):
+        """Test that _mask_url properly masks URLs for logging."""
+        mock_load_settings.return_value = {
+            "target": {"mode": "local"},
+            "llm": {"model": "openai/gemini-2.5-flash"},
+        }
+        mock_rag.return_value = Mock()
+        mock_runner.return_value = Mock()
+        mock_evaluator.return_value = Mock()
+
+        from rag_test_suite.flow import RAGTestSuiteFlow
+
+        flow = RAGTestSuiteFlow()
+
+        # Test URL masking
+        url = "https://rag-engine.example.com:8080/mcp"
+        masked = flow._mask_url(url)
+
+        # Should show host but mask the path
+        assert "rag-engine.example.com" in masked
+        assert "..." in masked  # Path is replaced with ...
+
+
+class TestRunFlowWithRAGParams:
+    """Tests for run_flow function with RAG parameters."""
+
+    @patch("rag_test_suite.flow.RAGTestSuiteFlow")
+    def test_run_flow_passes_rag_params_to_kickoff(self, mock_flow_class):
+        """Test that run_flow passes RAG parameters to kickoff."""
+        mock_flow = Mock()
+        mock_flow.state = Mock()
+        mock_flow.crew_runner = Mock()
+        mock_flow.kickoff.return_value = "Test report"
+        mock_flow_class.return_value = mock_flow
+
+        from rag_test_suite.flow import run_flow
+
+        result = run_flow(
+            rag_backend="qdrant",
+            rag_qdrant_url="https://qdrant.example.com",
+            rag_qdrant_api_key="secret-key",
+            rag_qdrant_collection="my-collection",
+            num_tests=10,
+        )
+
+        # Verify kickoff was called with inputs dict
+        mock_flow.kickoff.assert_called_once()
+        call_args = mock_flow.kickoff.call_args
+        inputs = call_args.kwargs.get("inputs", {})
+
+        assert inputs["RAG_BACKEND"] == "qdrant"
+        assert inputs["RAG_QDRANT_URL"] == "https://qdrant.example.com"
+        assert inputs["RAG_QDRANT_API_KEY"] == "secret-key"
+        assert inputs["RAG_QDRANT_COLLECTION"] == "my-collection"
+
+    @patch("rag_test_suite.flow.RAGTestSuiteFlow")
+    def test_run_flow_passes_ragengine_params(self, mock_flow_class):
+        """Test that run_flow passes RAG Engine parameters to kickoff."""
+        mock_flow = Mock()
+        mock_flow.state = Mock()
+        mock_flow.crew_runner = Mock()
+        mock_flow.kickoff.return_value = "Test report"
+        mock_flow_class.return_value = mock_flow
+
+        from rag_test_suite.flow import run_flow
+
+        result = run_flow(
+            rag_backend="ragengine",
+            rag_mcp_url="https://mcp.example.com/mcp",
+            rag_mcp_token="mcp-token",
+            rag_corpus="my-corpus",
+        )
+
+        # Verify kickoff was called with inputs dict
+        call_args = mock_flow.kickoff.call_args
+        inputs = call_args.kwargs.get("inputs", {})
+
+        assert inputs["RAG_BACKEND"] == "ragengine"
+        assert inputs["RAG_MCP_URL"] == "https://mcp.example.com/mcp"
+        assert inputs["RAG_MCP_TOKEN"] == "mcp-token"
+        assert inputs["RAG_CORPUS"] == "my-corpus"
+
+    @patch("rag_test_suite.flow.RAGTestSuiteFlow")
+    def test_run_flow_sets_state_rag_fields(self, mock_flow_class):
+        """Test that run_flow sets RAG fields in state."""
+        mock_flow = Mock()
+        mock_flow.state = Mock()
+        mock_flow.crew_runner = Mock()
+        mock_flow.kickoff.return_value = "Test report"
+        mock_flow_class.return_value = mock_flow
+
+        from rag_test_suite.flow import run_flow
+
+        run_flow(
+            rag_backend="qdrant",
+            rag_mcp_url="https://mcp.example.com",
+            rag_corpus="corpus",
+            rag_qdrant_url="https://qdrant.example.com",
+            rag_qdrant_collection="collection",
+        )
+
+        # Verify state was updated
+        assert mock_flow.state.rag_backend == "qdrant"
+        assert mock_flow.state.rag_mcp_url == "https://mcp.example.com"
+        assert mock_flow.state.rag_corpus == "corpus"
+        assert mock_flow.state.rag_qdrant_url == "https://qdrant.example.com"
+        assert mock_flow.state.rag_qdrant_collection == "collection"
+
+    @patch("rag_test_suite.flow.RAGTestSuiteFlow")
+    def test_run_flow_passes_target_api_token(self, mock_flow_class):
+        """Test that run_flow passes target API token."""
+        mock_flow = Mock()
+        mock_flow.state = Mock()
+        mock_flow.crew_runner = Mock()
+        mock_flow.kickoff.return_value = "Test report"
+        mock_flow_class.return_value = mock_flow
+
+        from rag_test_suite.flow import run_flow
+
+        run_flow(
+            target_api_url="https://api.example.com/kickoff",
+            target_api_token="bearer-token-123",
+        )
+
+        # Verify token was set
+        assert mock_flow.state.target_api_token == "bearer-token-123"
+        assert mock_flow.crew_runner.api_token == "bearer-token-123"

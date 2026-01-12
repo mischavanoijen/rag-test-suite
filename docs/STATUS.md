@@ -1,14 +1,17 @@
 # CrewAI Test Suite — Project Status
 
-*Last Updated: January 12, 2026 (15:30 UTC)*
+*Last Updated: January 12, 2026 (18:00 UTC)*
 
 ---
 
 ## Executive Summary
 
-The **rag-test-suite** is a CrewAI Flow that automatically tests RAG-based chat crews. The implementation is **COMPLETE** and **INTEGRATION TESTED** — all core components are built, 145/145 unit tests pass, and the test suite has been validated against a live RAG Engine MCP (Market Intelligence corpus).
+The **rag-test-suite** is a CrewAI Flow that automatically tests RAG-based chat crews. The implementation is **COMPLETE** and **INTEGRATION TESTED** — all core components are built, 154+ unit tests pass, and the test suite has been validated against a live RAG Engine MCP (Market Intelligence corpus).
 
 ### Recent Updates
+- ✅ **API-configurable RAG** — RAG configuration can now be passed via API inputs at runtime
+- ✅ **Dynamic tool reconfiguration** — `kickoff()` reconfigures RAG tools from inputs
+- ✅ **New parameters** — Support for both RAG Engine (MCP) and Qdrant via API
 - ✅ **Integration tested** against live MI RAG Engine MCP
 - ✅ **Discovery mode** successfully mapped RAG knowledge domains
 - ✅ **Test generation** created high-quality test cases from real RAG content
@@ -34,7 +37,8 @@ The **rag-test-suite** is a CrewAI Flow that automatically tests RAG-based chat 
 | **RagQueryTool** | ✅ Complete | RAG Engine MCP + Qdrant backends |
 | **CrewRunnerTool** | ✅ Complete | API mode (Enterprise) + Local mode |
 | **EvaluatorTool** | ✅ Complete | LLM-as-judge evaluation |
-| **Unit Tests** | ✅ Complete | 145 tests, all passing |
+| **API RAG Configuration** | ✅ Complete | Dynamic RAG tool reconfiguration via API inputs |
+| **Unit Tests** | ✅ Complete | 154+ tests, all passing |
 | **Integration Testing** | ✅ Complete | Tested with MI RAG Engine MCP |
 | **CrewAI Enterprise Deploy** | 🔄 Pending | Ready for deployment |
 
@@ -85,9 +89,73 @@ rag-test-suite/
 
 ---
 
+## API RAG Configuration
+
+The test suite supports dynamic RAG configuration via API inputs, making it a **universal testing tool** for any RAG system.
+
+### Supported API Inputs
+
+| Input | Description |
+|-------|-------------|
+| `RAG_BACKEND` | Backend type: `ragengine` or `qdrant` |
+| `RAG_MCP_URL` | RAG Engine MCP server URL |
+| `RAG_MCP_TOKEN` | Bearer token for MCP authentication |
+| `RAG_CORPUS` | Corpus name/path for RAG queries |
+| `RAG_QDRANT_URL` | Qdrant server URL |
+| `RAG_QDRANT_API_KEY` | Qdrant API key |
+| `RAG_QDRANT_COLLECTION` | Qdrant collection name |
+| `TARGET_API_URL` | CrewAI Enterprise kickoff URL |
+| `TARGET_API_TOKEN` | Bearer token for target crew |
+| `NUM_TESTS` | Number of tests to generate |
+| `CREW_DESCRIPTION` | Description of crew purpose |
+| `RUN_MODE` | Execution mode (full, prompt_only, etc.) |
+
+### API Usage Example
+
+```bash
+curl -X POST https://app.crewai.com/api/v1/flows/{flow_id}/kickoff \
+  -H "Authorization: Bearer $CREWAI_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "inputs": {
+      "RUN_MODE": "full",
+      "RAG_BACKEND": "ragengine",
+      "RAG_MCP_URL": "https://my-rag-engine.run.app/mcp",
+      "RAG_MCP_TOKEN": "my-rag-token",
+      "RAG_CORPUS": "my-knowledge-base",
+      "TARGET_API_URL": "https://app.crewai.com/api/v1/crews/123/kickoff",
+      "TARGET_API_TOKEN": "crew-token",
+      "CREW_DESCRIPTION": "Customer support assistant",
+      "NUM_TESTS": 15
+    }
+  }'
+```
+
+### Programmatic Usage
+
+```python
+from rag_test_suite.flow import run_flow
+
+result = run_flow(
+    rag_backend="ragengine",
+    rag_mcp_url="https://my-rag-engine.run.app/mcp",
+    rag_mcp_token="my-token",
+    rag_corpus="my-corpus",
+    target_api_url="https://app.crewai.com/api/v1/crews/123/kickoff",
+    target_api_token="crew-token",
+    num_tests=20,
+    crew_description="Customer support assistant",
+    run_mode="full",
+)
+```
+
+---
+
 ## Environment Variables
 
-### Required for RAG Engine (MCP)
+Environment variables can be used as defaults when API inputs are not provided.
+
+### RAG Engine (MCP)
 
 | Variable | Description |
 |----------|-------------|
@@ -95,14 +163,22 @@ rag-test-suite/
 | `PG_RAG_TOKEN` | Bearer token for MCP authentication |
 | `PG_RAG_CORPUS` | Corpus name/path for RAG queries |
 
-### Required for Target Crew (API Mode)
+### Qdrant
+
+| Variable | Description |
+|----------|-------------|
+| `RAG_QDRANT_URL` | Qdrant server URL |
+| `RAG_QDRANT_API_KEY` | Qdrant API key |
+| `RAG_QDRANT_COLLECTION` | Qdrant collection name |
+
+### Target Crew (API Mode)
 
 | Variable | Description |
 |----------|-------------|
 | `TARGET_API_URL` | CrewAI Enterprise kickoff URL |
 | `TARGET_API_TOKEN` | Bearer token for Enterprise API |
 
-### Required for LLM
+### LLM
 
 | Variable | Description |
 |----------|-------------|
@@ -151,7 +227,7 @@ result = run_flow(
 
 ```
 $ python -m pytest tests/ -v
-============================= 145 passed in 1.72s =============================
+======================== 154 passed in 3.54s ========================
 ```
 
 All tests passing:
@@ -160,6 +236,7 @@ All tests passing:
 - Tool unit tests (RagQueryTool, CrewRunnerTool, EvaluatorTool)
 - Crew initialization tests (Discovery, TestGeneration, Evaluation, Reporting, PromptGenerator)
 - Flow state and routing tests
+- **API RAG configuration tests** (9 new tests for dynamic RAG tool reconfiguration)
 
 ---
 
